@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { FC, PropsWithChildren } from "react";
+import { Navbar } from "../ui/Navbar";
 
 interface Props extends PropsWithChildren {
   title: string;
@@ -15,11 +16,11 @@ export const AppLayout: FC<Props> = ({ children, title, pageDescription }) => {
         <meta name="og:title" content={title} />
         <meta name="og:description" content={pageDescription} />
       </Head>
-      {/* <Navbar /> */}
+      <Navbar />
       <main
-      className="min-h-screen"
+      className="min-h-screen max-w-6xl mx-auto"
         style={{
-          padding: "70px 20px",
+          padding: "20px",
         }}
       >
         {children}

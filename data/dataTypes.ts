@@ -1,0 +1,1 @@
+export const dataTypes = ['escuelas de samba', 'integrantes', '']
