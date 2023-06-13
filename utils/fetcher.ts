@@ -1,3 +1,3 @@
-import { proyectoApi } from "@/api/proyectoApi";
+import { sambaApi } from "@/api/sambaApi";
 
-export const fetcher = (url: string) => proyectoApi.get(url).then(res => res.data);
+export const fetcher = (url: string) => sambaApi.get(url).then(res => res.data);

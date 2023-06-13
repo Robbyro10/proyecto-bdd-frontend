@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export const proyectoApi = axios.create({
+export const sambaApi = axios.create({
     baseURL: process.env.API_URL
 })
