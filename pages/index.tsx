@@ -16,8 +16,8 @@ export default function Home() {
         <h5>Conoce toda la informacion sobre los carnavales de Brazil</h5>
       </div>
 
-      <div className="flex justify-around flex-wrap gap-5 mt-10">
-        <div className="flex flex-col gap-5">
+
+        <div className="flex flex-col gap-5 mt-10 w-fit mx-auto">
           <Link href={"/escuelas"} className="flex items-end gap-2 w-fit">
             <Image
               src={"/colegio.png"}
@@ -38,17 +38,8 @@ export default function Home() {
             />
             <h1 className="text-2xl font-bold hover:underline">Integrantes</h1>
           </Link>
-          <Link href={"/samba"} className="flex items-end gap-2 w-fit">
-            <Image
-              src={"/guitarra.png"}
-              alt="icono de guitarra y musica"
-              width={50}
-              height={50}
-            />
-            <h1 className="text-2xl font-bold hover:underline">Samba</h1>
-          </Link>
 
-          <Link href={"/empresa"} className="flex items-end gap-2 w-fit">
+          <Link href={"/patrocinante-empresa"} className="flex items-end gap-2 w-fit">
             <Image
               src={"/empresa.png"}
               alt="icono de empresa"
@@ -56,12 +47,10 @@ export default function Home() {
               height={50}
             />
             <h1 className="text-2xl font-bold hover:underline">
-              Patrocinante Empresa
+              Empresas Patrocinantes
             </h1>
           </Link>
-        </div>
-        <div className="flex flex-col gap-5">
-          <Link href={"/persona"} className="flex items-end gap-2 w-fit">
+          <Link href={"/patrocinante-persona"} className="flex items-end gap-2 w-fit">
             <Image
               src={"/empresario.png"}
               alt="icono de empresario"
@@ -69,29 +58,10 @@ export default function Home() {
               height={50}
             />
             <h1 className="text-2xl font-bold hover:underline">
-              Patrocinante Persona
+              Personas Patrocinantes
             </h1>
           </Link>
-          <Link href={"/telefonos"} className="flex items-end gap-2 w-fit">
-            <Image
-              src={"/llamada.png"}
-              alt="icono de telefono"
-              width={40}
-              height={40}
-            />
-            <h1 className="text-2xl font-bold hover:underline">Teléfonos</h1>
-          </Link>
-          <Link href={"/donacion"} className="flex items-end gap-2 w-fit">
-            <Image
-              src={"/donacion.png"}
-              alt="icono de flujo de donacion"
-              width={50}
-              height={50}
-            />
-            <h1 className="text-2xl font-bold hover:underline">Donación</h1>
-          </Link>
         </div>
-      </div>
     </AppLayout>
   );
 }

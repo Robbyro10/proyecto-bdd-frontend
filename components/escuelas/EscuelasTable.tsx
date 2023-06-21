@@ -5,13 +5,14 @@ import { FaTrash } from "react-icons/fa";
 import { HiPencil } from "react-icons/hi";
 import useSWR from "swr";
 import { EscuelaModal } from "./EscuelaModal";
+import Swal from "sweetalert2";
 
 export const EscuelasTable: FC = () => {
   const { data, error, isLoading } = useSWR(`/escuelas`, fetcher, {
     refreshInterval: 1000,
   });
 
-  const [lugares, setLugares] = useState(undefined);
+  const [lugares, setLugares] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSchool, setActiveSchool] = useState(null);
 
@@ -22,7 +23,7 @@ export const EscuelasTable: FC = () => {
         setLugares(res.data);
       })
       .catch((err) => console.log(err));
-  }, [data]);
+  }, [isOpen]);
 
   const handleAdd = () => {
     setActiveSchool(null);
@@ -30,7 +31,20 @@ export const EscuelasTable: FC = () => {
   };
 
   const handleDelete = async (id: number) => {
-    await sambaApi.delete("/escuelas/" + id);
+    Swal.fire({
+      title: '¿Borrar Registro?',
+      text: "Esta acción es irreversible.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Borrar',
+      cancelButtonText: 'Cancelar' 
+    }).then((result) => {
+      if (result.isConfirmed) {
+          sambaApi.delete("/escuelas/" + id);
+        }
+      })
   };
 
   const handleEdit = (escuela: any) => {
@@ -42,7 +56,8 @@ export const EscuelasTable: FC = () => {
 
   return (
     <>
-      <table className="w-full">
+    { data.length > 0 ? (
+      <table className="w-full bg-purple-100">
         <tbody>
           <tr>
             <th>Id</th>
@@ -73,7 +88,11 @@ export const EscuelasTable: FC = () => {
           ))}
         </tbody>
       </table>
-      {lugares ? (
+      )
+    : (
+      <h1 className="text-2xl text-center">No hay Escuelas, agrega una!</h1>
+    )}
+      {lugares.length > 0 ? (
         <>
           <button
             onClick={handleAdd}
@@ -85,7 +104,6 @@ export const EscuelasTable: FC = () => {
           <EscuelaModal
             isOpen={isOpen}
             onClose={() => setIsOpen(false)}
-            lugares={lugares}
             escuela={activeSchool}
           />
         </>

@@ -3,15 +3,17 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { sambaApi } from "@/api/sambaApi";
 import { BsChevronDown } from 'react-icons/bs'
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
+import { uppercaseStrings } from "@/utils/uppercaseStrings";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  lugares: any[];
   escuela?: any;
 }
 
-export const EscuelaModal: FC<Props> = ({ isOpen, onClose, lugares, escuela }) => {
+export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
   const {
     register,
     handleSubmit,
@@ -20,6 +22,10 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, lugares, escuela }) =
     setValue,
     formState: { errors },
   } = useForm();
+
+  const { data, error, isLoading } = useSWR(`/escuelas/lugar`, fetcher, {
+    refreshInterval: 1000,
+  });
 
   useEffect(() => {
     setValue('nombre', escuela?.nombre);
@@ -32,11 +38,14 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, lugares, escuela }) =
 
   const onSubmit = async (data: any) => {
     data = {...data, id_lugar: parseInt(data.id_lugar) }
+    data = uppercaseStrings(data);
     if (escuela) {
       await sambaApi.patch(`/escuelas/${escuela.id}`, data);
     } else await sambaApi.post('/escuelas', data);
     onClose();
   };
+
+  if (isLoading) return <h1>Loading...</h1>
 
   return (
     <div className="fixed bg-black z-20 inset-0 bg-opacity-30 flex justify-center items-center backdrop-blur-sm">
@@ -99,7 +108,7 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, lugares, escuela }) =
               )}
             </div>
             <div className="flex flex-col gap-1 relative">
-                <label className="text-yellow">Lugar</label>
+                <label className="text-lg">Lugar</label>
                 <BsChevronDown className="absolute right-4 bottom-3" />
 
                 <select
@@ -107,11 +116,11 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, lugares, escuela }) =
                   {...register("id_lugar")}
                 >
                   {
-                    lugares.map( lugar => (<option key={lugar.id} value={lugar.id} >{lugar.nombre}</option>))
+                    data.map( (lugar: any) => (<option key={lugar.id} value={lugar.id} >{lugar.nombre}</option>))
                   }
                 </select>
               </div>
-            <button className="bg-secondary hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">
+            <button className="bg-secondary mt-5 hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">
               Enviar
             </button>
           </form>
