@@ -6,6 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
+import Swal from "sweetalert2";
 
 interface Props {
   isOpen: boolean;
@@ -30,9 +31,9 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
     setValue("segundo_apellido", integrante?.segundo_apellido);
     setValue("genero", integrante?.genero);
     setValue("apodo", integrante?.apodo);
-    setValue("nacionalidad", integrante?.nacionalidad);
     setValue("doc_identidad", integrante?.doc_identidad);
     setValue("nacionalidad", integrante?.nacionalidad);
+    setValue("fecha_nac", integrante?.fecha_nac);
   }, [integrante]);
 
   if (!isOpen) return null;
@@ -40,6 +41,13 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
   const onSubmit = async (data: any) => {
     data = { ...data, doc_identidad: parseInt(data.doc_identidad) };
     data = uppercaseStrings(data);
+    if (!data.fecha_nac){
+      return Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Agregue la fecha de nacimiento',
+      })
+    }
     if (integrante) {
       await sambaApi.patch(`/integrantes/${integrante.id}`, data);
     } else await sambaApi.post("/integrantes", data);
@@ -125,9 +133,7 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
                   className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                   type="date"
                   placeholder="Fecha de Nacimiento"
-                  {...register("fecha_nac", {
-                    required: true,
-                  })}
+                  {...register("fecha_nac")}
                 />
               </div>
             <div className="grid grid-cols-2 gap-5">
@@ -168,7 +174,7 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
                 <BsChevronDown className="absolute right-4 bottom-3" />
                 <select
                   className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
-                  {...register("genero")}
+                  {...register("genero", { required: true})}
                 >
                   <option value={"M"}>Masculino</option>
                   <option value={"F"}>Femenino</option>

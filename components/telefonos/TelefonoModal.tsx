@@ -10,13 +10,11 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   telefono?: any;
+  tipo: string;
+  id: string;
 }
 
-export const TelefonoModal: FC<Props> = ({
-  isOpen,
-  onClose,
-  telefono,
-}) => {
+export const TelefonoModal: FC<Props> = ({ isOpen, onClose, telefono, tipo, id }) => {
   const {
     register,
     handleSubmit,
@@ -30,18 +28,20 @@ export const TelefonoModal: FC<Props> = ({
     setValue("cod_int", telefono?.cod_int);
     setValue("cod_area", telefono?.cod_area);
     setValue("numero", telefono?.numero);
-
   }, [telefono]);
 
   if (!isOpen) return null;
 
   const onSubmit = async (data: any) => {
-    data = { ...data, 
-        doc_identidad: parseInt(data.doc_identidad),
-     };
-    if (telefono) {
-      await sambaApi.patch(`/patrocinantes/persona/${telefono.id}`, data);
-    } else await sambaApi.post("/patrocinantes/persona", data);
+    data = {
+      cod_int: parseInt(data.cod_int),
+      cod_area: parseInt(data.cod_area),
+      numero: parseInt(data.numero),
+      tipo
+    };
+    if (telefono.cod_int) {
+      await sambaApi.patch(`/telefonos/${id}`, data);
+    } else await sambaApi.post(`/telefonos/${id}`, data);
     onClose();
     console.log(data);
   };
@@ -60,7 +60,7 @@ export const TelefonoModal: FC<Props> = ({
         </button>
         <div>
           <h1 className="font-bold text-3xl text-secondary">
-            {telefono ? "Editar" : "Agregar"} Teléfono
+            {telefono.cod_int ? "Editar" : "Agregar"} Teléfono
           </h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -105,7 +105,6 @@ export const TelefonoModal: FC<Props> = ({
               </div>
             </div>
 
-
             <button className="mt-5 bg-secondary hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">
               Enviar
             </button>
@@ -115,5 +114,3 @@ export const TelefonoModal: FC<Props> = ({
     </div>
   );
 };
-
-

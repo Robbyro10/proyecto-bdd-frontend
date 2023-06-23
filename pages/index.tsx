@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <AppLayout title="Home" pageDescription="Esta es la pagina principal">
+    <AppLayout title="Home - Samba Express" pageDescription="Esta es la pagina principal">
       <div className="flex flex-col gap-2 items-center">
         <Image
           src={"/mascara.png"}

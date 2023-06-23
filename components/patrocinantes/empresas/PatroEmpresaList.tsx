@@ -17,7 +17,7 @@ export const PatroEmpresaList = () => {
         <div key={patro.id} className="bg-accent-light p-5 rounded">
           <div className="flex items-baseline gap-2 mb-2">
             <Link
-              href={"/patros/" + patro.id}
+              href={"/patrocinante-empresa/" + patro.id}
               className="text-xl font-bold hover:underline text-secondary"
             >
               {patro.nombre}

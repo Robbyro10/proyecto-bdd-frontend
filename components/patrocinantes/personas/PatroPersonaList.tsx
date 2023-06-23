@@ -16,7 +16,7 @@ export const PatroPersonaList = () => {
       {data.map((patro: any) => (
         <div key={patro.id} className="bg-accent-light p-5 rounded">
           <Link
-            href={"/patros/" + patro.id}
+            href={"/patrocinante-persona/" + patro.id}
             className="text-xl font-bold text-secondary hover:underline"
           >
             {patro.primer_nombre}&nbsp;

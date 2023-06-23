@@ -95,9 +95,8 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-lg">Resumen Histórico</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="text"
+              <textarea
+                className="px-3 resize-none h-40 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                 placeholder="Resumen Histórico"
                 {...register("resumen_hist", {
                   required: true,

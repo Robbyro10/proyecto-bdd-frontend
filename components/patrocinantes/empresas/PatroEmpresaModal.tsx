@@ -95,9 +95,8 @@ export const PatroEmpresaModal: FC<Props> = ({
 
             <div className="flex flex-col gap-1">
               <label className="text-lg">Misión</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="text"
+              <textarea
+                className="px-3 h-28 resize-none py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                 placeholder="Misión"
                 {...register("mision")}
               />
