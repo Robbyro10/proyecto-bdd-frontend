@@ -3,17 +3,33 @@ import { FaPencilAlt } from 'react-icons/fa'
 import { FiTrash2 } from 'react-icons/fi'
 import { HiPlus } from 'react-icons/hi'
 import { TelefonoModal } from './TelefonoModal';
+import { sambaApi } from '@/api/sambaApi';
+import Swal from 'sweetalert2';
+import { fireToast } from '@/utils/fireToast';
 
 interface Props {
     id: string;
     telefono: any;
+    tipo: string;
 }
 
-export const TelefonoUi: FC<Props> = ({ id, telefono }) => {
+export const TelefonoUi: FC<Props> = ({ id, telefono, tipo }) => {
     const [isTeleOpen, setIsTeleOpen] = useState(false);
 
-    const deleteTelefono = () => {
-        console.log("this is deletes a Telefono")
+    const deleteTelefono = async () => {
+      Swal.fire({
+        title: '¿Borrar Teléfono?',
+        text: "Esta acción es irreversible",
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Borrar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          sambaApi.delete('/telefonos/'+ id);
+          fireToast('El Teléfono ha sido borrado');
+        }
+      })
       };
 
   return (
@@ -53,7 +69,7 @@ export const TelefonoUi: FC<Props> = ({ id, telefono }) => {
         onClose={() => setIsTeleOpen(false)}
         telefono={telefono}
         id={id}
-        tipo="persona"
+        tipo={tipo}
       />
     </>
   )

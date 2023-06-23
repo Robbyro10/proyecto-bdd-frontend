@@ -74,7 +74,7 @@ const EscuelaDetailPage: NextPage<Props> = ({ id }) => {
       <p>{escuela.nombre_lugar}</p>
       <p>{escuela.direccion_sede}</p>
 
-      <TelefonoUi id={id} telefono={telefono} />
+      <TelefonoUi id={id} telefono={telefono} tipo="escuela" />
 
       <button
         onClick={handleDelete}

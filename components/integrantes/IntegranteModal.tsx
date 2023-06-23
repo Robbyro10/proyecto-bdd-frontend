@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
 import Swal from "sweetalert2";
+import { fireToast } from "@/utils/fireToast";
 
 interface Props {
   isOpen: boolean;
@@ -50,7 +51,11 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
     }
     if (integrante) {
       await sambaApi.patch(`/integrantes/${integrante.id}`, data);
-    } else await sambaApi.post("/integrantes", data);
+      fireToast('Integrante actualizado con éxito');
+    } else {
+      await sambaApi.post("/integrantes", data);
+      fireToast('Integrante agregado con éxito');
+    } 
     onClose();
   };
 

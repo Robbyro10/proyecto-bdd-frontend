@@ -53,7 +53,7 @@ const PatroPersonaDetailPage: NextPage<Props> = ({ id }) => {
       <h2 className="font-bold text-xl mt-5">DOC. DE IDENTIDAD</h2>
       <p>{persona.doc_identidad}</p>
 
-      <TelefonoUi id={id} telefono={telefono} />
+      <TelefonoUi id={id} telefono={telefono} tipo="persona" />
 
       <PatroPersonaModal
         isOpen={isOpen}

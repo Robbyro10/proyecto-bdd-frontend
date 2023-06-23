@@ -1,27 +1,33 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 export const Navbar = () => {
+  const { asPath } = useRouter();
+
   return (
     <nav className="bg-secondary py-4 shadow">
       <div className="flex justify-between max-w-6xl mx-auto px-5">
-        <div className="flex gap-2 items-center">
+        <Link href="/" className="flex gap-2 items-center">
           <Image src={'/mascara.png'} alt={'icono de mascara de carnaval'} width={35} height={35}/>
-          <Link href="/" className="font-bold text-2xl text-white">
+          <h2 className="font-bold text-2xl text-white">
             SambaExpress
-          </Link>
-        </div>
+          </h2>
+        </Link>
         <div className="flex justify-between items-center">
-          <div className="flex gap-5 font-bold text-white">
-            <Link href="/" className="">
-              Home
+          <div className="flex gap-5 items-center font-bold text-white">
+            <Link href="/escuelas" className={`hover:bg-white hover:text-secondary rounded-md px-2 py-1 transition ${asPath.includes('/escuelas') ? 'text-secondary bg-white' : ''}`}>
+              Escuelas
             </Link>
-            <Link href="#" className="">
-              About
+            <Link href="/integrantes" className={`hover:bg-white hover:text-secondary rounded-md px-2 py-1 transition ${asPath.includes('/integrantes') ? 'text-secondary bg-white' : ''}`}>
+              Integrantes
             </Link>
-            <Link href="#" className="">
-              Contact
+            <Link href="/patrocinante-empresa" className={`hover:bg-white hover:text-secondary rounded-md px-2 py-1 transition ${asPath.includes('/patrocinante-empresa') ? 'text-secondary bg-white' : ''}`}>
+              Empresas
+            </Link>
+            <Link href="/patrocinante-persona" className={`hover:bg-white hover:text-secondary rounded-md px-2 py-1 transition ${asPath.includes('/patrocinante-persona') ? 'text-secondary bg-white' : ''}`}>
+              Personas
             </Link>
           </div>
         </div>

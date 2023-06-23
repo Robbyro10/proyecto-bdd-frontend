@@ -6,6 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
+import { fireToast } from "@/utils/fireToast";
 
 interface Props {
   isOpen: boolean;
@@ -46,7 +47,11 @@ export const PatroPersonaModal: FC<Props> = ({
     data = uppercaseStrings(data);
     if (patroPersona) {
       await sambaApi.patch(`/patrocinantes/persona/${patroPersona.id}`, data);
-    } else await sambaApi.post("/patrocinantes/persona", data);
+      fireToast('Patrocinante actualizado con éxito');
+    } else {
+      await sambaApi.post("/patrocinantes/persona", data);
+      fireToast('Patrocinante agregado con éxito');
+    }
     onClose();
   };
 

@@ -55,7 +55,7 @@ const PatroEmpresaDetailPage: NextPage<Props> = ({ id }) => {
         patroEmpresa={empresa}
       />
 
-      <TelefonoUi id={id} telefono={telefono} />
+      <TelefonoUi id={id} telefono={telefono} tipo="empresa" />
 
       <p>{empresa.direccion_sede}</p>
       <button className="flex items-center text-error font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out">

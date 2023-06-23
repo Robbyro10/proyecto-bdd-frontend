@@ -5,6 +5,7 @@ import { sambaApi } from "@/api/sambaApi";
 import { BsChevronDown } from "react-icons/bs";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
+import { fireToast } from "@/utils/fireToast";
 
 interface Props {
   isOpen: boolean;
@@ -41,7 +42,11 @@ export const TelefonoModal: FC<Props> = ({ isOpen, onClose, telefono, tipo, id }
     };
     if (telefono.cod_int) {
       await sambaApi.patch(`/telefonos/${id}`, data);
-    } else await sambaApi.post(`/telefonos/${id}`, data);
+      fireToast('Telefono actualizado con éxito');
+    } else {
+      await sambaApi.post(`/telefonos/${id}`, data);
+      fireToast('Telefono agregado con éxito');
+    };
     onClose();
     console.log(data);
   };

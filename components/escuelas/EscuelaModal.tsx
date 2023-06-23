@@ -6,6 +6,7 @@ import { BsChevronDown } from 'react-icons/bs'
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
+import { fireToast } from "@/utils/fireToast";
 
 interface Props {
   isOpen: boolean;
@@ -41,7 +42,11 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
     data = uppercaseStrings(data);
     if (escuela) {
       await sambaApi.patch(`/escuelas/${escuela.id}`, data);
-    } else await sambaApi.post('/escuelas', data);
+      fireToast('Escuela actualizada con éxito');
+    } else {
+      await sambaApi.post('/escuelas', data);
+      fireToast('Escuela agregada con éxito');
+    }
     onClose();
   };
 
