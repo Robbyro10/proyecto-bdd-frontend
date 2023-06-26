@@ -5,72 +5,90 @@ import { FaPencilAlt } from "react-icons/fa";
 import useSWR from "swr";
 import { FiTrash2 } from "react-icons/fi";
 import { useState } from "react";
-import { IntegranteModal } from "@/components/integrantes/IntegranteModal";
+import {
+  HabilidadesUi,
+  IntegranteModal,
+  IntegrantesUi,
+} from "@/components/integrantes";
+import { sambaApi } from "@/api/sambaApi";
+import { Router, useRouter } from "next/router";
+import Swal from "sweetalert2";
+import Link from "next/link";
 
 interface Props {
   id: string;
 }
 
 const IntegranteDetailPage: NextPage<Props> = ({ id }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { data, error, isLoading } = useSWR(`/integrantes/${id}`, fetcher, {
     refreshInterval: 1000,
   });
 
   if (isLoading) return <h1>Loading...</h1>;
-  let { integrante, habilidades } = data;
-
+  let {
+    integrante: [integrante],
+    habilidades,
+    escuela,
+    roles,
+    parientes,
+  } = data;
+  
   return (
     <AppLayout
-      title={`${integrante[0].primer_nombre} ${integrante[0].primer_apellido} - Integrante`}
+      title={`${integrante.primer_nombre} ${integrante.primer_apellido} - Integrante`}
       pageDescription={`Toda la informacion que puedas desear sobre la integrante ${integrante.nombre}`}
     >
-      <div className="flex gap-3 items-center">
-        <h1 className="font-bold text-3xl">
-          {integrante[0].primer_nombre}&nbsp;
-          {integrante[0].segundo_nombre && integrante[0].segundo_nombre + " "}
-          {integrante[0].primer_apellido}&nbsp;
-          {integrante[0].segundo_apellido}
-        </h1>
-        <button onClick={()=> setIsOpen(true)} className="hover:scale-110 text-xl h-fit transition ease-out flex text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center">
-          <FaPencilAlt />
-        </button>
+      <IntegrantesUi id={id} integrante={integrante} />
+
+      <h1 className="font-bold text-xl text-primary mt-3">ESCUELA</h1>
+      {escuela.lenght > 0 ? (
+        escuela.map((escuela: any) => (
+          <Link
+            key={escuela.id}
+            href={"/escuelas/" + escuela.id}
+            className="hover:underline text-secondary"
+          >
+            {escuela.nombre}
+          </Link>
+        ))
+      ) : (
+        <p>NO TIENE</p>
+      )}
+      <HabilidadesUi habilidades={habilidades} />
+
+      <h1 className="font-bold text-xl text-primary mt-5">
+        ROLES DESEMPEÑADOS
+      </h1>
+      <div className="flex flex-col gap-3 mt-2">
+        {roles[0] ? (
+          roles.map((rol: any) => (
+            <div key={rol.año} className="">
+              <p className="text-sm">{rol.descripcion}.</p>
+              <b className="text-sm">{rol.año.substring(0, 10)}</b>
+            </div>
+          ))
+        ) : (
+          <p>NO TIENE</p>
+        )}
       </div>
-      <h2 className="font-bold mt-5">NACIONALIDAD</h2>
-      <p>{integrante[0].nacionalidad}</p>
-      <h2 className="font-bold mt-5">FECHA DE NACIMIENTO</h2>
-      <p>{integrante[0].fecha_nac}</p>
-      <h2 className="font-bold mt-5">APODO</h2>
-      {integrante[0].apodo ? <p>{integrante[0].apodo}</p> : <p>NO TIENE</p>}
-      <h2 className="font-bold mt-5">DOC. DE IDENTIDAD</h2>
-      {integrante[0].doc_identidad ? (
-        <p>{integrante[0].doc_identidad}</p>
-      ) : (
-        <p>NO TIENE</p>
-      )}
-      <IntegranteModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        integrante={integrante[0]}
-      />
 
-      <h2 className="font-bold text-2xl mt-5 mb-2">HABILIDADES</h2>
-      {habilidades[0] ? (
-        <ol className="list-disc">
-          {habilidades.map((hab: any) => (
-            <li className="ml-5" key={hab.id_habilidad}>
-              {hab.nombre_habilidad}
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <p>NO TIENE</p>
-      )}
-
-      <button className="flex items-center text-error font-bold gap-2 mt-10 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out">
-        <FiTrash2 />
-        Borrar Integrante
-      </button>
+      <h1 className="font-bold text-xl text-primary mt-5">PARIENTES</h1>
+      <div className="flex flex-col gap-3 mt-2">
+        {parientes[0] ? (
+          parientes.map((par: any) => (
+            <div key={par.integrante1 + par.integrante2} className="">
+              <p className="text-sm">
+                {par.relacion} DE{" "}
+                <Link href={"/integrantes/" + par.integrante2} className="text-secondary hover:underline">
+                  {par.primer_nombre} {par.primer_apellido}
+                </Link>
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>NO TIENE</p>
+        )}
+      </div>
     </AppLayout>
   );
 };

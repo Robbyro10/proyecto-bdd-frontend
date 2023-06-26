@@ -1,0 +1,64 @@
+import { FC, useState } from "react";
+import { FaPencilAlt } from "react-icons/fa";
+import { FiTrash2 } from "react-icons/fi";
+import { TituloModal } from "./TituloModal";
+import { BiPlus} from 'react-icons/bi'
+
+interface Props {
+  titulos: any[];
+}
+
+export const TitulosUi: FC<Props> = ({ titulos }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const updateTitulo = () => {
+    setIsOpen(true);
+  };
+
+  const deleteTitulo = () => {
+    console.log("delete titulo");
+  };
+
+  const addTitulo = () => {
+    setIsOpen(true);
+  };
+  return (
+    <div className="my-10">
+      <h2 className="font-bold text-xl mt-5 text-primary">TÍTULOS OBTENIDOS</h2>
+      {titulos[0] ? (
+        <div className="flex gap-3 flex-wrap my-5">
+          {titulos.map((tit: any) => (
+            <div key={tit.año} className="bg-accent-light p-3 rounded hover:scale-105 transition ease-out shadow group hover:group-hover w-60">
+              <div className="flex items-center mb-2">
+                <h5 className="text-lg font-bold mr-5">{tit.año.substring(0, 10)}</h5>
+                <button
+                  onClick={updateTitulo}
+                  className="hover:scale-110 ml-auto hidden group-hover:flex h-fit transition ease-out text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
+                >
+                  <FaPencilAlt />
+                </button>
+                <button
+                  onClick={deleteTitulo}
+                  className="hover:scale-110 h-fit transition ease-out hidden group-hover:flex text-error"
+                >
+                  <FiTrash2 />
+                </button>
+              </div>
+              <p>GRUPO: <b>{tit.grupo}</b></p>
+              {tit.monto_ganado > 0 && <p>MONTO: {tit.monto_ganado}</p>}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>NO TIENE</p>
+      )}
+      <TituloModal isOpen={isOpen} onClose={()=> setIsOpen(false)} />
+      <button
+        onClick={addTitulo}
+        className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
+      >
+        <BiPlus />
+        Título
+      </button>
+    </div>
+  );
+};

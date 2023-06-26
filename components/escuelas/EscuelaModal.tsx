@@ -2,7 +2,7 @@ import React, { FC, useEffect } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { sambaApi } from "@/api/sambaApi";
-import { BsChevronDown } from 'react-icons/bs'
+import { BsChevronDown } from "react-icons/bs";
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
@@ -29,28 +29,28 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
   });
 
   useEffect(() => {
-    setValue('nombre', escuela?.nombre);
-    setValue('direccion_sede', escuela?.direccion_sede);
-    setValue('resumen_hist', escuela?.resumen_hist);
-    setValue('id_lugar', escuela?.id_lugar);
-  }, [escuela])
-  
+    setValue("nombre", escuela?.nombre);
+    setValue("direccion_sede", escuela?.direccion_sede);
+    setValue("resumen_hist", escuela?.resumen_hist);
+    setValue("id_lugar", escuela?.id_lugar);
+  }, [escuela]);
+
   if (!isOpen) return null;
 
   const onSubmit = async (data: any) => {
-    data = {...data, id_lugar: parseInt(data.id_lugar) }
+    data = { ...data, id_lugar: parseInt(data.id_lugar) };
     data = uppercaseStrings(data);
     if (escuela) {
       await sambaApi.patch(`/escuelas/${escuela.id}`, data);
-      fireToast('Escuela actualizada con éxito');
+      fireToast("Escuela actualizada con éxito");
     } else {
-      await sambaApi.post('/escuelas', data);
-      fireToast('Escuela agregada con éxito');
+      await sambaApi.post("/escuelas", data);
+      fireToast("Escuela agregada con éxito");
     }
     onClose();
   };
 
-  if (isLoading) return <h1>Loading...</h1>
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <div className="fixed bg-black z-20 inset-0 bg-opacity-30 flex justify-center items-center backdrop-blur-sm">
@@ -65,7 +65,9 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
           <IoCloseSharp />
         </button>
         <div>
-          <h1 className="font-bold text-3xl text-secondary">{escuela ? "Editar" : "Agregar"} Escuela</h1>
+          <h1 className="font-bold text-3xl text-secondary">
+            {escuela ? "Editar" : "Agregar"} Escuela
+          </h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5 mt-5"
@@ -112,18 +114,20 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
               )}
             </div>
             <div className="flex flex-col gap-1 relative">
-                <label className="text-lg">Lugar</label>
-                <BsChevronDown className="absolute right-4 bottom-3" />
+              <label className="text-lg">Lugar</label>
+              <BsChevronDown className="absolute right-4 bottom-3" />
 
-                <select
-                  className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
-                  {...register("id_lugar")}
-                >
-                  {
-                    data.map( (lugar: any) => (<option key={lugar.id} value={lugar.id} >{lugar.nombre}</option>))
-                  }
-                </select>
-              </div>
+              <select
+                className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
+                {...register("id_lugar")}
+              >
+                {data.map((lugar: any) => (
+                  <option key={lugar.id} value={lugar.id}>
+                    {lugar.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button className="bg-secondary mt-5 hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">
               Enviar
             </button>

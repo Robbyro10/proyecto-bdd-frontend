@@ -17,12 +17,7 @@ export const AppLayout: FC<Props> = ({ children, title, pageDescription }) => {
         <meta name="og:description" content={pageDescription} />
       </Head>
       <Navbar />
-      <main
-      className="min-h-screen max-w-6xl mx-auto"
-        style={{
-          padding: "20px",
-        }}
-      >
+      <main className="min-h-screen max-w-6xl mx-auto p-5 pb-28">
         {children}
       </main>
       <footer>{/* todo footer */}</footer>
