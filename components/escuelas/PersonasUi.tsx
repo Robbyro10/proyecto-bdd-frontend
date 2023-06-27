@@ -11,7 +11,7 @@ export const PersonasUi: FC<Props> = ({ personas }) => {
   return (
     <>
       <h3 className="text-lg font-bold mt-3">PERSONAS</h3>
-      {personas && (
+      {personas[0] ? (
         <>
           {personas.map((per: any) => (
             <div key={per.id} className="flex flex-col">
@@ -26,16 +26,16 @@ export const PersonasUi: FC<Props> = ({ personas }) => {
                 {per.fecha_fin?.substring(0, 10) || "ACTUALIDAD"}
               </p>
             </div>
-          ))}
+          )) }
         </>
-      )}
-      <button
+      ): <p>NO TIENE</p> }
+      {/* <button
         onClick={addPersona}
         className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
       >
         <BiPlus />
         Persona
-      </button>
+      </button> */}
     </>
   );
 };

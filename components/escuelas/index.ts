@@ -12,3 +12,5 @@ export * from './EscuelasUi';
 export * from './SambaModal';
 export * from './SambasUi';
 export * from './EventosModal';
+export * from './EscuelaIntModal';
+export * from './EscuelaIntUi';

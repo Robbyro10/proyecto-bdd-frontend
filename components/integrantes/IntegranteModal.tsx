@@ -3,11 +3,8 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { sambaApi } from "@/api/sambaApi";
 import { BsChevronDown } from "react-icons/bs";
-import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
-import Swal from "sweetalert2";
-import { fireToast } from "@/utils/fireToast";
+import { deleteFalsyAttributes, fireError, fireToast } from "@/utils";
 
 interface Props {
   isOpen: boolean;
@@ -34,7 +31,7 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
     setValue("apodo", integrante?.apodo);
     setValue("doc_identidad", integrante?.doc_identidad);
     setValue("nacionalidad", integrante?.nacionalidad);
-    setValue("fecha_nac", integrante?.fecha_nac);
+    setValue("fecha_nac", integrante?.fecha_nac.substring(0,10));
   }, [integrante]);
 
   if (!isOpen) return null;
@@ -42,19 +39,18 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
   const onSubmit = async (data: any) => {
     data = { ...data, doc_identidad: parseInt(data.doc_identidad) };
     data = uppercaseStrings(data);
-    if (!data.fecha_nac){
-      return Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Agregue la fecha de nacimiento',
-      })
+    deleteFalsyAttributes(data);
+    if (!data.fecha_nac || parseInt(data.fecha_nac.substr(0, 4)) > 2022){
+      return fireError();
     }
     if (integrante) {
       await sambaApi.patch(`/integrantes/${integrante.id}`, data);
       fireToast('Integrante actualizado con éxito');
     } else {
-      await sambaApi.post("/integrantes", data);
-      fireToast('Integrante agregado con éxito');
+      await sambaApi.post("/integrantes", data)
+      .then(()=> fireToast('Integrante agregado con éxito'))
+      .catch(()=> fireError());
+
     } 
     onClose();
   };

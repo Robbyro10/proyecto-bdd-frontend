@@ -14,7 +14,9 @@ interface Props {
 
 export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const updateSamba = () => {
+  const [activeSamba, setActiveSamba] = useState(undefined);
+  const updateSamba = (samba: any) => {
+    setActiveSamba(samba)
     setIsOpen(true);
   };
 
@@ -41,6 +43,7 @@ export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
   };
 
   const addSamba = () => {
+    setActiveSamba(undefined);
     setIsOpen(true);
   };
   return (
@@ -59,7 +62,7 @@ export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
               </h2>
               <div>
                 <button
-                  onClick={updateSamba}
+                  onClick={()=>updateSamba(samba)}
                   className="hover:scale-110 h-fit transition ease-out text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
                 >
                   <FaPencilAlt />
@@ -85,7 +88,7 @@ export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
       ) : (
         <p>No tiene</p>
       )}
-      <SambaModal isOpen={isOpen} onClose={() => setIsOpen(false)} integrantes={integrantes} />
+      <SambaModal isOpen={isOpen} onClose={() => setIsOpen(false)} integrantes={integrantes} samba={activeSamba} />
       <button
         onClick={addSamba}
         className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
@@ -96,7 +99,4 @@ export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
     </>
   );
 };
-function confirmAndDelete() {
-    throw new Error("Function not implemented.");
-}
 

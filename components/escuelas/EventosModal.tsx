@@ -5,6 +5,7 @@ import { sambaApi } from "@/api/sambaApi";
 import { BsChevronDown } from "react-icons/bs";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
 import { fireToast } from "@/utils/fireToast";
+import { useRouter } from "next/router";
 
 interface Props {
   isOpen: boolean;
@@ -20,12 +21,14 @@ export const EventosModal: FC<Props> = ({ isOpen, onClose, evento }) => {
     formState: { errors },
   } = useForm();
 
+  const router = useRouter();
+
   useEffect(() => {
     setValue("nombre", evento?.nombre);
     setValue("tipo", evento?.tipo);
     setValue("descripcion", evento?.descripcion);
-    setValue("fecha_ini", evento?.fecha_ini);
-    setValue("fecha_fin", evento?.fecha_fin);
+    setValue("fecha_ini", evento?.fecha_ini.substring(0, 10) || new Date().toISOString().substring(0, 10));
+    setValue("fecha_fin", evento?.fecha_fin.substring(0, 10));
     setValue("costo_unitario_r$", evento?.costo_unitario_r$);
     setValue("total_asistentes", evento?.total_asistentes);
   }, [evento]);
@@ -33,13 +36,18 @@ export const EventosModal: FC<Props> = ({ isOpen, onClose, evento }) => {
   if (!isOpen) return null;
 
   const onSubmit = async (data: any) => {
-    data = { ...data, id_lugar: parseInt(data.id_lugar) };
+    data = {
+      ...data,
+      agjid_escuela: parseInt(router.query.id as string),
+      total_asistentes: parseInt(data.total_asistentes),
+      costo_unitario_r$: parseInt(data.costo_unitario_r$),
+    };
     data = uppercaseStrings(data);
     if (evento) {
       await sambaApi.patch(`/escuelas/evento/${evento.id}`, data);
       fireToast("Evento actualizado con éxito");
     } else {
-      await sambaApi.post("/escuelas/eventos", data);
+      await sambaApi.post("/escuelas/evento", data);
       fireToast("Evento agregado con éxito");
     }
     onClose();
@@ -94,77 +102,70 @@ export const EventosModal: FC<Props> = ({ isOpen, onClose, evento }) => {
               )}
             </div>
             <div className="flex gap-3 w-full">
-
-            <div className="flex flex-col gap-1 w-full">
-              <label className="text-lg">Fecha de Inicio</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="date"
-                {...register("fecha_ini", {
-                  required: true,
-                })}
-              />
-              {errors.fecha_ini?.type === "required" && (
-                <p className="text-error mb-3">Campo obligatorio</p>
-              )}
-            </div>
-            <div className="flex flex-col gap-1 w-full">
-              <label className="text-lg">Fecha Fin</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="date"
-                {...register("fecha_fin", {
-                  required: true,
-                })}
-              />
-              {errors.fecha_fin?.type === "required" && (
-                <p className="text-error mb-3">Campo obligatorio</p>
-              )}
-            </div>
+              <div className="flex flex-col gap-1 w-full">
+                <label className="text-lg">Fecha de Inicio</label>
+                <input
+                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                  type="date"
+                  {...register("fecha_ini", {
+                    required: true,
+                  })}
+                />
+                {errors.fecha_ini?.type === "required" && (
+                  <p className="text-error mb-3">Campo obligatorio</p>
+                )}
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <label className="text-lg">Fecha Fin</label>
+                <input
+                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                  type="date"
+                  {...register("fecha_fin", {
+                    required: true,
+                  })}
+                />
+                {errors.fecha_fin?.type === "required" && (
+                  <p className="text-error mb-3">Campo obligatorio</p>
+                )}
+              </div>
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-lg">Descripción</label>
               <textarea
                 className="px-3 resize-none h-20 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                 placeholder="Descripción"
-                {...register("descripcion", {
-                  required: true,
-                })}
+                {...register("descripcion")}
               />
-              {errors.descripcion?.type === "required" && (
-                <p className="text-error mb-3">Campo obligatorio</p>
-              )}
             </div>
             <div className="flex gap-3 w-full">
-
-            <div className="flex flex-col gap-1 w-full">
-              <label className="text-lg">Total de Asistentes</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="number"
-                placeholder="Total de Asistentes"
-                {...register("total_asistentes", {
-                  required: true,
-                })}
-              />
-              {errors.total_asistentes?.type === "required" && (
-                <p className="text-error mb-3">Campo obligatorio</p>
-              )}
-            </div>
-            <div className="flex flex-col gap-1 w-full">
-              <label className="text-lg">Costo Unitario (R$)</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="number"
-                placeholder="Costo unitario (R$)"
-                {...register("costo_unitario_r$", {
-                  required: true,
-                })}
-              />
-              {errors.costo_unitario_r$?.type === "required" && (
-                <p className="text-error mb-3">Campo obligatorio</p>
-              )}
-            </div>
+              <div className="flex flex-col gap-1 w-full">
+                <label className="text-lg">Total de Asistentes</label>
+                <input
+                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                  type="number"
+                  placeholder="Total de Asistentes"
+                  {...register("total_asistentes", {
+                    required: true,
+                  })}
+                />
+                {errors.total_asistentes?.type === "required" && (
+                  <p className="text-error mb-3">Campo obligatorio</p>
+                )}
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <label className="text-lg">Costo Unitario (R$)</label>
+                <input
+                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                  type="number"
+                  placeholder="Costo unitario (R$)"
+                  {...register("costo_unitario_r$", {
+                    required: true,
+                  })}
+                />
+                {errors.costo_unitario_r$?.type === "required" && (
+                  <p className="text-error mb-3">Campo obligatorio</p>
+                )}
+              </div>
             </div>
             <button className="bg-secondary mt-5 hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">
               Enviar

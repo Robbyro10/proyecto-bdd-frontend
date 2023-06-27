@@ -7,6 +7,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { useState } from "react";
 import {
   HabilidadesUi,
+  IntEscuelaUi,
   IntegranteModal,
   IntegrantesUi,
 } from "@/components/integrantes";
@@ -40,20 +41,8 @@ const IntegranteDetailPage: NextPage<Props> = ({ id }) => {
     >
       <IntegrantesUi id={id} integrante={integrante} />
 
-      <h1 className="font-bold text-xl text-primary mt-3">ESCUELA</h1>
-      {escuela.lenght > 0 ? (
-        escuela.map((escuela: any) => (
-          <Link
-            key={escuela.id}
-            href={"/escuelas/" + escuela.id}
-            className="hover:underline text-secondary"
-          >
-            {escuela.nombre}
-          </Link>
-        ))
-      ) : (
-        <p>NO TIENE</p>
-      )}
+      <IntEscuelaUi escuela={escuela} />
+      
       <HabilidadesUi habilidades={habilidades} />
 
       <h1 className="font-bold text-xl text-primary mt-5">

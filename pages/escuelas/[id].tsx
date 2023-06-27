@@ -5,6 +5,7 @@ import useSWR from "swr";
 import {
   ColoresUi,
   EmpresasUi,
+  EscuelaIntUi,
   EscuelaModal,
   EscuelasUi,
   EventosUi,
@@ -54,29 +55,11 @@ const EscuelaDetailPage: NextPage<Props> = ({ id }) => {
 
       <ColoresUi colores={colores} />
 
+      <EscuelaIntUi integrantes={integrantes} />
+
       <EventosUi eventos={eventos} />
 
       <TitulosUi titulos={titulos} />
-
-      <h2 className="font-bold text-xl mt-5 text-primary">INTEGRANTES</h2>
-      {integrantes ? (
-        <ol className="list-disc mt-3">
-          {integrantes.map((int: any) => (
-            <li key={int.id} className="ml-5">
-              <Link
-                href={"/integrantes/" + int.id}
-                className="hover:underline text-secondary"
-              >
-                {int.primer_nombre}&nbsp;
-                {int.primer_apellido}&nbsp;
-                {int.segundo_apellido}
-              </Link>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <p>NO TIENE</p>
-      )}
 
       <SambasUi sambas={sambas} integrantes={integrantes} />
 

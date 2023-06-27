@@ -5,6 +5,7 @@ import { sambaApi } from "@/api/sambaApi";
 import { BsChevronDown } from "react-icons/bs";
 import { fireToast } from "@/utils/fireToast";
 import { useRouter } from "next/router";
+import { checkDates, fireError } from "@/utils";
 
 interface Props {
   isOpen: boolean;
@@ -27,11 +28,10 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
   useEffect(() => {
     setValue("monto_ganado", titulo?.monto_ganado);
     setValue("grupo", titulo?.grupo);
+    setValue("año", new Date().toISOString().substring(0, 10));
   }, [titulo]);
 
   if (!isOpen) return null;
-
-  console.log(titulo)
 
   const onSubmit = async (data: any) => {
     if (!data.monto_ganado) {
@@ -42,7 +42,9 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
       monto_ganado: parseInt(data.monto_ganado),
       agjid_escuela: parseInt(router.query.id as string),
     };
-
+    if (parseInt(data.año.substr(0, 4)) > 2023){
+      return fireError();
+    }
     if (titulo) {
       await sambaApi.patch(
         `/escuelas/titulo/${data.año.substring(0, 10)}`,
@@ -70,7 +72,7 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
         </button>
         <div>
           <h1 className="font-bold text-3xl text-secondary">
-            {titulo ? "Editar" : "Agregar"} Título
+            {titulo ? "Editar" : "Agregar"} Título de Carnaval
           </h1>
           <form
             onSubmit={handleSubmit(onSubmit)}

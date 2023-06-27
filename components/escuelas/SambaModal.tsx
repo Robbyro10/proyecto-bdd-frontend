@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
 import { fireToast } from "@/utils/fireToast";
+import { fireError } from "@/utils";
 
 interface Props {
   isOpen: boolean;
@@ -43,6 +44,9 @@ export const SambaModal: FC<Props> = ({
   const onSubmit = async (data: any) => {
     data = { ...data, año_carnaval: parseInt(data.año_carnaval) };
     data = uppercaseStrings(data);
+    if (parseInt(data.año_carnaval.substr(0, 4)) > 2023){
+      return fireError();
+    }
     if (samba) {
       await sambaApi.patch(`/sambas/${samba.id}`, data);
       fireToast("samba actualizada con éxito");
