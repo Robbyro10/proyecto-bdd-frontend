@@ -8,8 +8,8 @@ interface Props {
 export const PatroEscuelasUi: FC<Props> = ({ escuelas }) => {
   return (
     <>
-    <h1 className="font-bold text-2xl text-primary mt-5">ESCUELAS</h1>
-      {escuelas ? (
+    <h1 className="font-bold text-2xl text-primary mt-5">ESCUELAS QUE PATROCINA</h1>
+      {escuelas[0] ? (
         escuelas.map((escuela: any) => (
           <div key={escuela.id} className="mt-2">
             <Link

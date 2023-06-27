@@ -9,6 +9,7 @@ import {
   EscuelasUi,
   EventosUi,
   PersonasUi,
+  SambasUi,
   TitulosUi,
 } from "@/components/escuelas";
 import { TelefonoUi } from "@/components/telefonos/TelefonoUi";
@@ -77,27 +78,7 @@ const EscuelaDetailPage: NextPage<Props> = ({ id }) => {
         <p>NO TIENE</p>
       )}
 
-      <h2 className="font-bold text-xl mt-5 text-primary">SAMBAS</h2>
-      {sambas[0] ? (
-        sambas.map((samba: any) => (
-          <div
-            key={samba.año_carnaval}
-            className="bg-accent-light p-3 rounded shadow mt-3"
-          >
-            <h2 className="font-bold text-lg">
-              {samba.titulo} -{" "}
-              <small className="font-normal">{samba.tipo}</small>
-            </h2>
-            <p>
-              <b>AUTOR:</b> {samba.primer_nombre}&nbsp;{samba.primer_apellido}
-            </p>
-            <p className="my-2">{samba.letra}</p>
-            <p><b>AÑO DEL CARNAVAL:</b> {samba.año_carnaval}</p>
-          </div>
-        ))
-      ) : (
-        <p>No tiene</p>
-      )}
+      <SambasUi sambas={sambas} integrantes={integrantes} />
 
       <h2 className="font-bold text-xl mt-5 text-primary">PATROCINANTES</h2>
       <EmpresasUi empresas={empresas} />

@@ -1,15 +1,15 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { HiUsers } from "react-icons/hi";
+import { EventosModal } from "./EventosModal";
 
 interface Props {
   eventos: any[];
 }
 
 export const EventosUi: FC<Props> = ({ eventos }) => {
-  const addEvento = () => {
-    console.log("add persna");
-  };
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
       <h3 className="text-xl font-bold my-3 text-primary">
@@ -38,12 +38,13 @@ export const EventosUi: FC<Props> = ({ eventos }) => {
         </div>
       )}
       <button
-        onClick={addEvento}
+        onClick={()=> setIsOpen(true)}
         className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
       >
         <BiPlus />
         Evento
       </button>
+      <EventosModal isOpen={isOpen} onClose={()=> setIsOpen(false)} />
     </>
   );
 };

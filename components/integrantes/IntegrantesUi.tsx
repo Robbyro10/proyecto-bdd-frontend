@@ -57,18 +57,29 @@ export const IntegrantesUi: FC<Props> = ({ integrante, id }) => {
           Borrar Integrante
         </button>
       </div>
-      <h2 className="font-bold mt-5">NACIONALIDAD</h2>
-      <p>{integrante.nacionalidad}</p>
-      <h2 className="font-bold mt-5">FECHA DE NACIMIENTO</h2>
-      <p>{integrante.fecha_nac}</p>
-      <h2 className="font-bold mt-5">APODO</h2>
-      {integrante.apodo ? <p>{integrante.apodo}</p> : <p>NO TIENE</p>}
-      <h2 className="font-bold mt-5">DOC. DE IDENTIDAD</h2>
-      {integrante.doc_identidad ? (
-        <p>{integrante.doc_identidad}</p>
-      ) : (
-        <p>NO TIENE</p>
-      )}
+      <div className="grid grid-cols-2 max-w-lg mb-8">
+        <div>
+          <h2 className="font-bold mt-5 text-lg">NACIONALIDAD</h2>
+          <p>{integrante.nacionalidad}</p>
+        </div>
+        <div>
+          <h2 className="font-bold mt-5 text-lg">FECHA DE NACIMIENTO</h2>
+          <p>{integrante.fecha_nac.substring(0, 10)}</p>
+        </div>
+        <div>
+          <h2 className="font-bold mt-5 text-lg">APODO</h2>
+          {integrante.apodo ? <p>{integrante.apodo}</p> : <p>NO TIENE</p>}
+        </div>
+        <div>
+          <h2 className="font-bold mt-5 text-lg">DOC. DE IDENTIDAD</h2>
+          {integrante.doc_identidad ? (
+            <p>{integrante.doc_identidad}</p>
+          ) : (
+            <p>NO TIENE</p>
+          )}
+        </div>
+      </div>
+
       <IntegranteModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

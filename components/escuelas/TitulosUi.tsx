@@ -3,6 +3,9 @@ import { FaPencilAlt } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
 import { TituloModal } from "./TituloModal";
 import { BiPlus} from 'react-icons/bi'
+import { sambaApi } from "@/api/sambaApi";
+import { fireToast } from "@/utils/fireToast";
+import { fireError } from "@/utils";
 
 interface Props {
   titulos: any[];
@@ -10,15 +13,20 @@ interface Props {
 
 export const TitulosUi: FC<Props> = ({ titulos }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const updateTitulo = () => {
+  const [activeTitulo, setActiveTitulo] = useState(undefined);
+  const updateTitulo = (titulo: any) => {
+    setActiveTitulo(titulo);
     setIsOpen(true);
   };
 
-  const deleteTitulo = () => {
-    console.log("delete titulo");
+  const deleteTitulo = async(año: string) => {
+    await sambaApi.delete('/escuelas/titulo/' + año.substring(0,10))
+    .then(()=> fireToast('Título borrado con éxito'))
+    .catch(()=> fireError())
   };
 
   const addTitulo = () => {
+    setActiveTitulo(undefined);
     setIsOpen(true);
   };
   return (
@@ -31,27 +39,27 @@ export const TitulosUi: FC<Props> = ({ titulos }) => {
               <div className="flex items-center mb-2">
                 <h5 className="text-lg font-bold mr-5">{tit.año.substring(0, 10)}</h5>
                 <button
-                  onClick={updateTitulo}
+                  onClick={()=> updateTitulo(tit)}
                   className="hover:scale-110 ml-auto hidden group-hover:flex h-fit transition ease-out text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
                 >
                   <FaPencilAlt />
                 </button>
                 <button
-                  onClick={deleteTitulo}
+                  onClick={()=>deleteTitulo(tit.año)}
                   className="hover:scale-110 h-fit transition ease-out hidden group-hover:flex text-error"
                 >
                   <FiTrash2 />
                 </button>
               </div>
               <p>GRUPO: <b>{tit.grupo}</b></p>
-              {tit.monto_ganado > 0 && <p>MONTO: {tit.monto_ganado}</p>}
+              {tit.monto_ganado > 0 && <p>MONTO: {tit.monto_ganado} R$</p>}
             </div>
           ))}
         </div>
       ) : (
         <p>NO TIENE</p>
       )}
-      <TituloModal isOpen={isOpen} onClose={()=> setIsOpen(false)} />
+      <TituloModal isOpen={isOpen} onClose={()=> setIsOpen(false)} titulo={activeTitulo} />
       <button
         onClick={addTitulo}
         className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"

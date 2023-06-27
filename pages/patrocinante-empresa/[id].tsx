@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { TelefonoUi } from "@/components/telefonos/TelefonoUi";
 import { PatroEmpresaUi } from "@/components/patrocinantes/empresas";
 import Link from "next/link";
+import { DonacionesUi } from "@/components/patrocinantes/DonacionesUi";
 import { PatroEscuelasUi } from "@/components/patrocinantes/PatroEscuelasUi";
 interface Props {
   id: string;
@@ -22,7 +23,7 @@ const PatroEmpresaDetailPage: NextPage<Props> = ({ id }) => {
   if (isLoading) return <h1>Loading...</h1>;
   let {
     empresa: [empresa],
-    escuelas,
+    escuelas, donaciones
   } = data;
   let telefono = {
     cod_int: empresa.cod_int,
@@ -38,8 +39,8 @@ const PatroEmpresaDetailPage: NextPage<Props> = ({ id }) => {
       <PatroEmpresaUi empresa={empresa} id={id} />
       <TelefonoUi id={id} telefono={telefono} tipo="empresa" />
       <PatroEscuelasUi escuelas={escuelas} />
+      <DonacionesUi donaciones={donaciones} />
 
-      <p>{empresa.direccion_sede}</p>
     </AppLayout>
   );
 };

@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { fireToast } from "@/utils/fireToast";
 import { useRouter } from "next/router";
+import { fireError } from "@/utils";
 
 interface Props {
   isOpen: boolean;
@@ -26,10 +27,11 @@ export const ColoresModal: FC<Props> = ({ isOpen, onClose }) => {
 
   const onSubmit = async (data: any) => {
     data = {escuela_id: parseInt(router.query.id as string), color_id: parseInt(data.color_id)};
-    await sambaApi.post(`/escuelas/color`, data);
-    fireToast("Color agregado con éxito");
-
-    onClose();
+    await sambaApi.post(`/escuelas/color`, data)
+    .then(()=> {
+      fireToast("Color agregado con éxito");
+      onClose();
+    }).catch(()=> fireError());
   };
 
   if (isLoading) return <h1>Loading...</h1>

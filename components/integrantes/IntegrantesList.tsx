@@ -14,7 +14,7 @@ export const IntegrantesList = () => {
     <div className="flex flex-col gap-5">
       {data.map((integrante: any) => (
         <div key={integrante.id} className="bg-accent-light p-5 rounded">
-          <div className="flex gap-1 items-baseline text-xl mb-2">
+          <div className="flex gap-3 items-baseline text-xl mb-2">
             <Link href={'/integrantes/'+ integrante.id} className={`font-bold hover:underline ${integrante.genero === "M" ? ("text-primary") : ("text-pink-600")}`  }>
               {integrante.primer_nombre}&nbsp;
               {integrante.segundo_nombre && integrante.segundo_nombre + " "}
@@ -23,7 +23,7 @@ export const IntegrantesList = () => {
             </Link>
             <h2>{integrante.nacionalidad}</h2>
           </div>
-          <p>NACIMIENTO: {integrante.fecha_nac}</p>
+          <p>FECHA NAC: {integrante.fecha_nac.substring(0,10)}</p>
           {integrante.apodo && <p>APODO: {integrante.apodo}</p>}
         </div>
       ))}

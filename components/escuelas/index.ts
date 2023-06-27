@@ -9,3 +9,6 @@ export * from './PersonasUi';
 export * from './EmpresasUi';
 export * from './EventosUi';
 export * from './EscuelasUi';
+export * from './SambaModal';
+export * from './SambasUi';
+export * from './EventosModal';

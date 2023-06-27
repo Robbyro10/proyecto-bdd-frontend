@@ -2,9 +2,9 @@ import { AppLayout } from "@/components/layouts";
 import { fetcher } from "@/utils/fetcher";
 import { GetServerSideProps, NextPage } from "next";
 import useSWR from "swr";
-import { useState } from "react";
 import { TelefonoUi } from "@/components/telefonos/TelefonoUi";
 import { PatroPersonaUi } from "@/components/patrocinantes/personas";
+import { DonacionesUi } from "@/components/patrocinantes/DonacionesUi";
 import { PatroEscuelasUi } from "@/components/patrocinantes/PatroEscuelasUi";
 
 interface Props {
@@ -12,7 +12,6 @@ interface Props {
 }
 
 const PatroPersonaDetailPage: NextPage<Props> = ({ id }) => {
-  const [isOpen, setIsOpen] = useState(false);
 
   const { data, error, isLoading } = useSWR(
     `/patrocinantes/persona/${id}`,
@@ -24,9 +23,11 @@ const PatroPersonaDetailPage: NextPage<Props> = ({ id }) => {
 
   if (isLoading) return <h1>Loading...</h1>;
 
+  console.log(data)
+
   let {
     persona: [persona],
-    escuelas,
+    escuelas, donaciones
   } = data;
 
   let telefono = {
@@ -40,11 +41,10 @@ const PatroPersonaDetailPage: NextPage<Props> = ({ id }) => {
       title={`${persona.primer_nombre} ${persona.primer_apellido} - Persona`}
       pageDescription={`Toda la informacion que puedas desear sobre la persona ${persona.nombre}`}
     >
-      
       <PatroPersonaUi id={id} persona={persona} />
       <TelefonoUi id={id} telefono={telefono} tipo="persona" />
-      <PatroEscuelasUi escuelas={escuelas}  />
-  
+      <PatroEscuelasUi escuelas={escuelas} />
+      <DonacionesUi donaciones={donaciones} />
     </AppLayout>
   );
 };

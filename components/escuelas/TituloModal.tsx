@@ -25,19 +25,29 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
   const router = useRouter();
 
   useEffect(() => {
-    setValue("año", titulo?.año);
     setValue("monto_ganado", titulo?.monto_ganado);
     setValue("grupo", titulo?.grupo);
   }, [titulo]);
 
   if (!isOpen) return null;
 
+  console.log(titulo)
+
   const onSubmit = async (data: any) => {
-    if (!data.monto_ganado) { data.monto_ganado = 0}
-    data={...data, monto_ganado: parseInt(data.monto_ganado), agjid_escuela: parseInt(router.query.id as string)};
-    
+    if (!data.monto_ganado) {
+      data.monto_ganado = 0;
+    }
+    data = {
+      ...data,
+      monto_ganado: parseInt(data.monto_ganado),
+      agjid_escuela: parseInt(router.query.id as string),
+    };
+
     if (titulo) {
-      await sambaApi.patch(`/patrocinantes/persona/${titulo.id}`, data);
+      await sambaApi.patch(
+        `/escuelas/titulo/${data.año.substring(0, 10)}`,
+        data
+      );
       fireToast("Título actualizado con éxito");
     } else {
       await sambaApi.post("/escuelas/titulo", data);
@@ -66,19 +76,19 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5 mt-5"
           >
-            <div className="flex flex-col gap-1">
-              <label className="text-lg">Año</label>
-              <input
-                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                type="date"
-                {...register("año", {
-                  required: true,
-                })}
-              />
-              {errors.año?.type === "required" && (
-                <p className="text-error mb-3">Campo obligatorio</p>
-              )}
-            </div>
+            {titulo ? (
+              <h1>Año del titulo: {titulo.año.substring(0, 10)}</h1>
+            ) : (
+              <div className="flex flex-col gap-1">
+                <label className="text-lg">Año</label>
+                <input
+                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                  type="date"
+                  required
+                  {...register("año")}
+                />
+              </div>
+            )}
             <div className="flex flex-col gap-1">
               <label className="text-lg">Monto Ganado</label>
               <input
@@ -98,9 +108,13 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
                 {...register("grupo")}
               >
                 <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
                 <option value="Ac">Ac</option>
                 <option value="E">E</option>
                 <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
               </select>
             </div>
 

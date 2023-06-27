@@ -5,6 +5,7 @@ import { fireToast } from "@/utils/fireToast";
 import { sambaApi } from "@/api/sambaApi";
 import { useRouter } from "next/router";
 import { BiPlus } from "react-icons/bi";
+import { fireError } from "@/utils";
 
 interface Props {
   colores: any[];
@@ -14,8 +15,9 @@ export const ColoresUi: FC<Props> = ({ colores }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const deleteColor = async(color_id: number) => {
-    await sambaApi.patch(`/escuelas/color/${router.query.id}`, {color_id});
-    fireToast("Color eliminado con éxito");
+    await sambaApi.patch(`/escuelas/color/${router.query.id}`, {color_id})
+    .then(()=> fireToast("Color eliminado con éxito"))
+    .catch(()=> fireError());
   };
 
   return (
