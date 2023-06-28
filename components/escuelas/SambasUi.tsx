@@ -14,37 +14,42 @@ interface Props {
 
 export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenAdd, setIsOpenAdd] = useState(false);
   const [activeSamba, setActiveSamba] = useState(undefined);
   const updateSamba = (samba: any) => {
-    setActiveSamba(samba)
+    setActiveSamba(samba);
     setIsOpen(true);
   };
 
   const deleteSamba = async (id: string) => {
     Swal.fire({
-        title: '¿Borrar Samba?',
-        text: "Esta acción es irreversible",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Borrar',
-        cancelButtonText: 'Cancelar'
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await sambaApi.delete("/escuelas/samba/" + id);
-            fireToast("Samba borrada con éxito");
-          } catch (error) {
-            fireError();
-          }
+      title: "¿Borrar Samba?",
+      text: "Esta acción es irreversible",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Borrar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await sambaApi.delete("/samba/" + id);
+          fireToast("Samba borrada con éxito");
+        } catch (error) {
+          fireError();
         }
-      });
+      }
+    });
+  };
+
+  const createSamba = () => {
+    setActiveSamba(undefined);
+    setIsOpen(true);
   };
 
   const addSamba = () => {
-    setActiveSamba(undefined);
-    setIsOpen(true);
+    setIsOpenAdd(true);
   };
   return (
     <>
@@ -62,7 +67,7 @@ export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
               </h2>
               <div>
                 <button
-                  onClick={()=>updateSamba(samba)}
+                  onClick={() => updateSamba(samba)}
                   className="hover:scale-110 h-fit transition ease-out text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
                 >
                   <FaPencilAlt />
@@ -88,15 +93,26 @@ export const SambasUi: FC<Props> = ({ sambas, integrantes }) => {
       ) : (
         <p>No tiene</p>
       )}
-      <SambaModal isOpen={isOpen} onClose={() => setIsOpen(false)} integrantes={integrantes} samba={activeSamba} />
-      <button
-        onClick={addSamba}
-        className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
-      >
-        <BiPlus />
-        Samba
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={createSamba}
+          className="flex h-fit items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
+        >
+          Crear Samba
+        </button>
+        <button
+          onClick={addSamba}
+          className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
+        >
+          <BiPlus />
+          Samba
+        </button>
+      </div>
+      <SambaModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        samba={activeSamba}
+      />
     </>
   );
 };
-

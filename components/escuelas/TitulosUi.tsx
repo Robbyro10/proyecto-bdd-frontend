@@ -49,13 +49,13 @@ export const TitulosUi: FC<Props> = ({ titulos }) => {
   };
   return (
     <div className="my-10">
-      <h2 className="font-bold text-xl mt-5 text-primary">TÍTULOS OBTENIDOS</h2>
+      <h2 className="font-bold text-2xl mt-5 text-primary">TÍTULOS OBTENIDOS</h2>
       {titulos[0] ? (
         <div className="flex gap-3 flex-wrap my-5">
           {titulos.map((tit: any) => (
             <div
               key={tit.año}
-              className="bg-accent-light p-3 rounded hover:scale-105 transition ease-out shadow group hover:group-hover w-60"
+              className="bg-accent-light p-3 rounded transition ease-out shadow group hover:group-hover w-60"
             >
               <div className="flex items-center mb-2">
                 <h5 className="text-lg font-bold mr-5">
@@ -63,13 +63,13 @@ export const TitulosUi: FC<Props> = ({ titulos }) => {
                 </h5>
                 <button
                   onClick={() => updateTitulo(tit)}
-                  className="hover:scale-110 ml-auto hidden group-hover:flex h-fit transition ease-out text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
+                  className="hover:scale-110 ml-auto h-fit transition ease-out text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
                 >
                   <FaPencilAlt />
                 </button>
                 <button
                   onClick={() => deleteTitulo(tit.año)}
-                  className="hover:scale-110 h-fit transition ease-out hidden group-hover:flex text-error"
+                  className="hover:scale-110 h-fit transition ease-out text-error"
                 >
                   <FiTrash2 />
                 </button>

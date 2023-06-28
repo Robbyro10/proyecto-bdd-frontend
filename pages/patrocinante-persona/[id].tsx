@@ -4,7 +4,6 @@ import { GetServerSideProps, NextPage } from "next";
 import useSWR from "swr";
 import { TelefonoUi } from "@/components/telefonos/TelefonoUi";
 import { PatroPersonaUi } from "@/components/patrocinantes/personas";
-import { DonacionesUi } from "@/components/patrocinantes/DonacionesUi";
 import { PatroEscuelasUi } from "@/components/patrocinantes/PatroEscuelasUi";
 
 interface Props {
@@ -22,8 +21,6 @@ const PatroPersonaDetailPage: NextPage<Props> = ({ id }) => {
   );
 
   if (isLoading) return <h1>Loading...</h1>;
-
-  console.log(data)
 
   let {
     persona: [persona],
@@ -43,8 +40,7 @@ const PatroPersonaDetailPage: NextPage<Props> = ({ id }) => {
     >
       <PatroPersonaUi id={id} persona={persona} />
       <TelefonoUi id={id} telefono={telefono} tipo="persona" />
-      <PatroEscuelasUi escuelas={escuelas} tipo="persona" />
-      <DonacionesUi donaciones={donaciones} />
+      <PatroEscuelasUi escuelas={escuelas} donaciones={donaciones} tipo="persona" />
     </AppLayout>
   );
 };

@@ -51,7 +51,7 @@ export const EventosUi: FC<Props> = ({ eventos }) => {
 
   return (
     <>
-      <h3 className="text-xl font-bold my-3 text-primary">
+      <h3 className="text-2xl font-bold my-3 text-primary">
         EVENTOS DE LA ESCUELA
       </h3>
 

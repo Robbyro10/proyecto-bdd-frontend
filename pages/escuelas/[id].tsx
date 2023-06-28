@@ -15,6 +15,7 @@ import {
 } from "@/components/escuelas";
 import { TelefonoUi } from "@/components/telefonos/TelefonoUi";
 import Link from "next/link";
+import { PremiosUi } from "@/components/premios/PremiosUi";
 
 interface Props {
   id: string;
@@ -36,6 +37,7 @@ const EscuelaDetailPage: NextPage<Props> = ({ id }) => {
     eventos,
     integrantes,
     sambas,
+    premios
   } = data;
 
   let telefono = {
@@ -58,6 +60,8 @@ const EscuelaDetailPage: NextPage<Props> = ({ id }) => {
       <EscuelaIntUi integrantes={integrantes} />
 
       <EventosUi eventos={eventos} />
+
+      <PremiosUi premios={premios} tipo={"E"} />
 
       <TitulosUi titulos={titulos} />
 

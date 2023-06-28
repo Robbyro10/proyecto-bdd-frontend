@@ -12,9 +12,15 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   tipo: string;
+  escuela: any;
 }
 
-export const PatroEscuelaModal: FC<Props> = ({ isOpen, onClose, tipo }) => {
+export const PatroEscuelaModal: FC<Props> = ({
+  isOpen,
+  onClose,
+  tipo,
+  escuela,
+}) => {
   const { data, error, isLoading } = useSWR(`/escuelas`, fetcher);
   const {
     register,
@@ -25,8 +31,17 @@ export const PatroEscuelaModal: FC<Props> = ({ isOpen, onClose, tipo }) => {
   const router = useRouter();
 
   useEffect(() => {
-    setValue("fecha_ini", new Date().toISOString().substring(0, 10));
-  }, []);
+    setValue(
+      "fecha_ini",
+      escuela?.fecha_ini.substring(0, 10) ||
+        new Date().toISOString().substring(0, 10)
+    );
+    setValue('agjid_escuela', escuela?.id);
+    setValue(
+      "fecha_fin",
+      escuela?.fecha_fin ? escuela?.fecha_fin.substring(0, 10) : null
+    );
+  }, [escuela]);
 
   if (!isOpen) return null;
 
@@ -36,15 +51,28 @@ export const PatroEscuelaModal: FC<Props> = ({ isOpen, onClose, tipo }) => {
       patrocinante_id: parseInt(router.query.id as string),
       agjid_escuela: parseInt(data.agjid_escuela),
     };
-    if (data.fecha_fin === "") {delete data.fecha_fin}
+    if (data.fecha_fin === "" || data.fecha_fin === null) {
+      delete data.fecha_fin;
+    }
     if (checkDates(data.fecha_ini, data.fecha_fin)) {
-      await sambaApi
-        .post(`/patrocinantes/${tipo}/escuela`, data)
-        .then(() => {
-          fireToast("Escuela agregado con éxito");
-          onClose();
-        })
-        .catch(() => fireError());
+      if (escuela) {
+        console.log(data)
+        await sambaApi
+          .patch(`/patrocinantes/${tipo}/escuela/${escuela.hist_id}`, data)
+          .then(() => {
+            fireToast("Patrocinio actualizado con éxito");
+            onClose();
+          })
+          
+      } else {
+        await sambaApi
+          .post(`/patrocinantes/${tipo}/escuela`, data)
+          .then(() => {
+            fireToast("Patrocinio agregado con éxito");
+            onClose();
+          })
+          .catch(() => fireError());
+      }
     } else {
       fireError();
     }
@@ -65,26 +93,32 @@ export const PatroEscuelaModal: FC<Props> = ({ isOpen, onClose, tipo }) => {
           <IoCloseSharp />
         </button>
         <div>
-          <h1 className="font-bold text-3xl text-secondary">Agregar Escuela</h1>
+          <h1 className="font-bold text-3xl text-secondary">
+            {escuela ? "Editar" : "Agregar"} Patrocinio
+          </h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5 mt-5"
           >
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-lg">Seleccione una Escuela</label>
-              <BsChevronDown className="absolute right-4 bottom-3" />
+            {escuela ? (
+              <p>ESCUELA: {escuela.nombre}</p>
+            ) : (
+              <div className="flex flex-col gap-1 relative">
+                <label className="text-lg">Seleccione una Escuela</label>
+                <BsChevronDown className="absolute right-4 bottom-3" />
 
-              <select
-                className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
-                {...register("agjid_escuela")}
-              >
-                {data.map((escuela: any) => (
-                  <option key={escuela.id} value={escuela.id}>
-                    {escuela.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <select
+                  className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
+                  {...register("agjid_escuela")}
+                >
+                  {data.map((escuela: any) => (
+                    <option key={escuela.id} value={escuela.id}>
+                      {escuela.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="flex gap-3 w-full">
               <div className="flex flex-col gap-1 w-full">
                 <label className="text-lg">Fecha de Inicio</label>

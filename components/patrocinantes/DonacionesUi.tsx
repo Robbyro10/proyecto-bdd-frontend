@@ -1,12 +1,15 @@
 import Link from "next/link";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
+import { DonacionModal } from "./DonacionModal";
 
 interface Props {
   donaciones: any[];
+  escuelas: any[];
+  tipo: string;
 }
 
-export const DonacionesUi: FC<Props> = ({ donaciones }) => {
-  console.log(donaciones);
+export const DonacionesUi: FC<Props> = ({ donaciones, escuelas, tipo }) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <h1 className="font-bold text-2xl text-primary mt-5">DONACIONES</h1>
@@ -34,6 +37,17 @@ export const DonacionesUi: FC<Props> = ({ donaciones }) => {
       ) : (
         <p>NO TIENE</p>
       )}
+      {
+        escuelas ? (
+          <button
+            onClick={() => setIsOpen(true)}
+            className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
+          >
+            Agregar Donacion
+          </button>
+        ) : <p className="text-sm text-gray-400">AGREGUE UNA ESCUELA PARA AGREGAR DONACIONES</p>
+      }
+      <DonacionModal isOpen={isOpen} onClose={()=> setIsOpen(false)} escuelas={escuelas} />
     </>
   );
 };

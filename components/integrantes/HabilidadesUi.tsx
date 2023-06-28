@@ -36,15 +36,15 @@ export const HabilidadesUi: FC<Props> = ({ habilidades }) => {
               key={hab.id_habilidad}
             >
               <h5 className="font-semibold mr-5">{hab.nombre_habilidad}</h5>
-              <button
+              {/* <button
                 onClick={editHabilidad}
                 className="hover:scale-110 h-fit ml-auto transition ease-out hidden group-hover:flex text-secondary gap-2 font-bold px-4 py-1 rounded-md items-center"
               >
                 <FaPencilAlt />
-              </button>
+              </button> */}
               <button
                 onClick={() => deleteHabilidad(hab.id_habilidad)}
-                className="hover:scale-110 h-fit transition ease-out hidden group-hover:flex text-error"
+                className="hover:scale-110 ml-auto h-fit transition ease-out hidden group-hover:flex text-error"
               >
                 <FiTrash2 />
               </button>

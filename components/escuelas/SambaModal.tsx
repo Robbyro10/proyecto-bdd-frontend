@@ -2,9 +2,6 @@ import React, { FC, useEffect } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { sambaApi } from "@/api/sambaApi";
-import { BsChevronDown } from "react-icons/bs";
-import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
 import { fireToast } from "@/utils/fireToast";
 import { fireError } from "@/utils";
@@ -13,20 +10,16 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   samba?: any;
-  integrantes: any[];
 }
 
 export const SambaModal: FC<Props> = ({
   isOpen,
   onClose,
   samba,
-  integrantes,
 }) => {
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
     setValue,
     formState: { errors },
   } = useForm();
@@ -36,7 +29,6 @@ export const SambaModal: FC<Props> = ({
     setValue("año_carnaval", samba?.año_carnaval);
     setValue("letra", samba?.letra);
     setValue("tipo", samba?.tipo);
-    setValue("autor", samba?.autor);
   }, [samba]);
 
   if (!isOpen) return null;
@@ -44,15 +36,15 @@ export const SambaModal: FC<Props> = ({
   const onSubmit = async (data: any) => {
     data = { ...data, año_carnaval: parseInt(data.año_carnaval) };
     data = uppercaseStrings(data);
-    if (parseInt(data.año_carnaval.substr(0, 4)) > 2023){
+    if (data.año_carnaval > 2023) {
       return fireError();
     }
     if (samba) {
-      await sambaApi.patch(`/sambas/${samba.id}`, data);
-      fireToast("samba actualizada con éxito");
+      await sambaApi.patch(`/samba/${samba.id}`, data);
+      fireToast("Samba actualizada con éxito");
     } else {
-      await sambaApi.post("/sambas", data);
-      fireToast("samba agregada con éxito");
+      await sambaApi.post("/samba", data);
+      fireToast("Samba agregada con éxito");
     }
     onClose();
   };
@@ -71,47 +63,27 @@ export const SambaModal: FC<Props> = ({
         </button>
         <div>
           <h1 className="font-bold text-3xl text-secondary">
-            {samba ? "Editar" : "Agregar"} Samba
+            {samba ? "Editar" : "Crear"} Samba
           </h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5 mt-5"
           >
-            <div className="flex gap-3 w-full">
-              <div className="flex flex-col gap-1">
-                <label className="text-lg">Título</label>
-                <input
-                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                  type="text"
-                  placeholder="Título"
-                  {...register("titulo", {
-                    required: true,
-                  })}
-                />
-                {errors.titulo?.type === "required" && (
-                  <p className="text-error mb-3">Campo obligatorio</p>
-                )}
-              </div>
-              {integrantes[0] ? (
-                <div className="flex flex-col gap-1 relative w-full">
-                  <label className="text-lg">Autor</label>
-                  <BsChevronDown className="absolute right-4 bottom-3" />
-
-                  <select
-                    className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
-                    {...register("autor")}
-                  >
-                    {integrantes.map((int: any) => (
-                      <option key={int.id} value={int.id}>
-                        {int.primer_nombre}&nbsp;{int.primer_apellido}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ) : (
-                <h2>Necesita agregar integrantes</h2>
+            <div className="flex flex-col gap-1">
+              <label className="text-lg">Título</label>
+              <input
+                className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                type="text"
+                placeholder="Título"
+                {...register("titulo", {
+                  required: true,
+                })}
+              />
+              {errors.titulo?.type === "required" && (
+                <p className="text-error mb-3">Campo obligatorio</p>
               )}
             </div>
+
             <div className="flex gap-3 w-full">
               <div className="flex flex-col gap-1">
                 <label className="text-lg">Año de Carnaval</label>

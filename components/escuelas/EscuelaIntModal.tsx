@@ -11,9 +11,10 @@ import { checkDates, fireError, fireToast } from "@/utils";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  integrante?: any;
 }
 
-export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose }) => {
+export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
   const { data, error, isLoading } = useSWR(`/integrantes`, fetcher);
   const {
     register,
@@ -24,8 +25,18 @@ export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose }) => {
   const router = useRouter();
 
   useEffect(() => {
-    setValue("fecha_ini", new Date().toISOString().substring(0, 10));
-  }, []);
+    setValue(
+      "fecha_ini",
+      integrante?.fecha_ini.substring(0, 10) ||
+        new Date().toISOString().substring(0, 10)
+    );
+    setValue("autoridad", integrante?.autoridad === "SI" ? true : false);
+    setValue("agjid_integrante", integrante?.id);
+    setValue(
+      "fecha_fin",
+      integrante?.fecha_fin ? integrante?.fecha_fin.substring(0, 10) : null
+    );
+  }, [integrante]);
 
   if (!isOpen) return null;
 
@@ -40,15 +51,31 @@ export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose }) => {
     } else {
       data.autoridad = "NO";
     }
-    if (data.fecha_fin === "") {delete data.fecha_fin}
+    if (data.fecha_fin === "" || !data.fecha_fin) {
+      delete data.fecha_fin;
+    }
     if (checkDates(data.fecha_ini, data.fecha_fin)) {
-      await sambaApi
-        .post(`/integrantes/int-escuela`, data)
-        .then(() => {
-          fireToast("Escuela agregado con éxito");
-          onClose();
-        })
-        .catch(() => fireError());
+      if (integrante) {
+        console.log(data)
+        await sambaApi
+          .patch(
+            `/integrantes/int-escuela/` + data.fecha_ini,
+            data
+          )
+          .then(() => {
+            fireToast("Escuela actualizada con éxito");
+            onClose();
+          })
+          
+      } else {
+        await sambaApi
+          .post(`/integrantes/int-escuela`, data)
+          .then(() => {
+            fireToast("Escuela agregada con éxito");
+            onClose();
+          })
+          .catch(() => fireError());
+      }
     } else {
       fireError();
     }
@@ -69,40 +96,54 @@ export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose }) => {
           <IoCloseSharp />
         </button>
         <div>
-          <h1 className="font-bold text-3xl text-secondary">Agregar Integrante</h1>
+          <h1 className="font-bold text-3xl text-secondary">
+            {integrante ? "Cerrar Histórico" : "Agregar Integrante"}
+          </h1>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5 mt-5"
           >
-            <div className="flex flex-col gap-1 relative">
-              <label className="text-lg">Seleccione un Integrante</label>
-              <BsChevronDown className="absolute right-4 bottom-3" />
-
-              <select
-                className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
-                {...register("agjid_integrante")}
-              >
-                {data.map((integrante: any) => (
-                  <option key={integrante.id} value={integrante.id}>
-                    {integrante.primer_nombre}&nbsp;{integrante.primer_apellido}&nbsp;{integrante.segundo_apellido}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex gap-3 w-full">
-              <div className="flex flex-col gap-1 w-full">
-                <label className="text-lg">Fecha de Inicio</label>
-                <input
-                  className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
-                  type="date"
-                  {...register("fecha_ini", {
-                    required: true,
-                  })}
-                />
-                {errors.fecha_ini?.type === "required" && (
-                  <p className="text-error mb-3">Campo obligatorio</p>
-                )}
+            {integrante ? (
+              <p>
+                INTEGRANTE: {integrante.primer_nombre}&nbsp;
+                {integrante.primer_apellido}
+              </p>
+            ) : (
+              <div className="flex flex-col gap-1 relative">
+                <label className="text-lg">Seleccione un Integrante</label>
+                <BsChevronDown className="absolute right-4 bottom-3" />
+                <select
+                  className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
+                  {...register("agjid_integrante")}
+                >
+                  {data.map((integrante: any) => (
+                    <option key={integrante.id} value={integrante.id}>
+                      {integrante.primer_nombre}&nbsp;
+                      {integrante.primer_apellido}
+                      &nbsp;{integrante.segundo_apellido}
+                    </option>
+                  ))}
+                </select>
               </div>
+            )}
+            <div className="flex gap-3 w-full">
+              {integrante ? (
+                <p>FECHA INI: {integrante.fecha_ini.substring(0, 10)}</p>
+              ) : (
+                <div className="flex flex-col gap-1 w-full">
+                  <label className="text-lg">Fecha de Inicio</label>
+                  <input
+                    className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
+                    type="date"
+                    {...register("fecha_ini", {
+                      required: true,
+                    })}
+                  />
+                  {errors.fecha_ini?.type === "required" && (
+                    <p className="text-error mb-3">Campo obligatorio</p>
+                  )}
+                </div>
+              )}
               <div className="flex flex-col gap-1 w-full">
                 <label className="text-lg">Fecha Fin</label>
                 <input
@@ -112,14 +153,18 @@ export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose }) => {
                 />
               </div>
             </div>
-            <div className="flex gap-3 w-full items-center">
-              <label className="text-lg">Es Autoridad</label>
-              <input
-                className="accent-secondary"
-                type="checkbox"
-                {...register("autoridad")}
-              />
-            </div>
+            {integrante ? (
+              <p>{integrante.autoridad ? "Es autoridad" : "No es autoridad"}</p>
+            ) : (
+              <div className="flex gap-3 w-full items-center">
+                <label className="text-lg">Es Autoridad</label>
+                <input
+                  className="accent-secondary"
+                  type="checkbox"
+                  {...register("autoridad")}
+                />
+              </div>
+            )}
 
             <button className="mt-5 bg-secondary hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">
               Enviar

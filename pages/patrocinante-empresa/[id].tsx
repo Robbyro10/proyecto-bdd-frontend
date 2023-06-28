@@ -38,8 +38,7 @@ const PatroEmpresaDetailPage: NextPage<Props> = ({ id }) => {
     >
       <PatroEmpresaUi empresa={empresa} id={id} />
       <TelefonoUi id={id} telefono={telefono} tipo="empresa" />
-      <PatroEscuelasUi escuelas={escuelas} tipo="empresa" />
-      <DonacionesUi donaciones={donaciones} />
+      <PatroEscuelasUi escuelas={escuelas} donaciones={donaciones} tipo="empresa" />
 
     </AppLayout>
   );
