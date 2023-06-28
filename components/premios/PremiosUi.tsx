@@ -6,6 +6,7 @@ import { FaPencilAlt } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
 import Swal from "sweetalert2";
 import { PremioModal } from "./PremioModal";
+import { AddPremioModal } from "./AddPremioModal";
 
 interface Props {
   premios: any[];
@@ -96,6 +97,11 @@ export const PremiosUi: FC<Props> = ({ premios, tipo }) => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         premio={activePremio}
+        tipo={tipo}
+      />
+      <AddPremioModal
+        isOpen={isOpenAdd}
+        onClose={() => setIsOpenAdd(false)}
         tipo={tipo}
       />
       <div className="flex gap-3">

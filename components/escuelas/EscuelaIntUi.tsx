@@ -22,8 +22,6 @@ export const EscuelaIntUi: FC<Props> = ({ integrantes }) => {
     setIsOpen(true);
   };
 
-  console.log(integrantes)
-
   return (
     <>
       <h2 className="font-bold text-xl mt-5 text-primary">INTEGRANTES</h2>
