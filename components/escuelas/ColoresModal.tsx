@@ -31,7 +31,7 @@ export const ColoresModal: FC<Props> = ({ isOpen, onClose }) => {
     .then(()=> {
       fireToast("Color agregado con éxito");
       onClose();
-    }).catch(()=> fireError());
+    }).catch(()=> fireError("Seleccione un color diferente"));
   };
 
   if (isLoading) return <h1>Loading...</h1>

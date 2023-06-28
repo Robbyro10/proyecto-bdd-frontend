@@ -50,7 +50,7 @@ export const IntEscuelaModal: FC<Props> = ({ isOpen, onClose }) => {
         })
         .catch(() => fireError());
     } else {
-      fireError();
+      fireError("Fechas inválidas");
     }
   };
 

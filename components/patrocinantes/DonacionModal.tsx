@@ -44,7 +44,7 @@ export const DonacionModal: FC<Props> = ({
         hist_patrocinio_agjid_escuela: parseInt(hist_patrocinio_agjid_escuela), 
         hist_patrocinio_id: parseInt(hist_patrocinio_id) 
     } 
-    if (parseInt(data.fecha.substr(0, 4)) > 2023){ return fireError(); }
+    if (parseInt(data.fecha.substr(0, 4)) > 2023){ return fireError("Año inválido"); }
     if (donacion) { //not ready
       await sambaApi.patch(
         `/escuelas/donacion/${data.fecha.substring(0, 10)}`,

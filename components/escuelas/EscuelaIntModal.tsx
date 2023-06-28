@@ -77,7 +77,7 @@ export const EscuelaIntModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
           .catch(() => fireError());
       }
     } else {
-      fireError();
+      fireError("Fechas inválidas");
     }
   };
 

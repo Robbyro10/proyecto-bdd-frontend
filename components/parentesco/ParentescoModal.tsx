@@ -41,7 +41,7 @@ export const ParentescoModal: FC<Props> = ({ isOpen, onClose }) => {
       integrante2: parseInt(data.integrante2 as string),
     };
     if (data.integrante1 === data.integrante2) {
-      fireError();
+      fireError("Un integrante no puede ser pariente de si mismo.");
     }
     data = uppercaseStrings(data);
     console.log(data)

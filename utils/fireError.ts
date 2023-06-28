@@ -1,5 +1,7 @@
 import Swal from "sweetalert2";
 
-export const fireError = () => {
-  Swal.fire("Error", "Ocurrio un error inesperado", "error");
+export const fireError = (errorMessage?: string) => {
+  Swal.fire("Error", 
+  errorMessage || "Ocurrio un error inesperado", 
+  "error");
 };

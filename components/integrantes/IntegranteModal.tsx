@@ -41,7 +41,7 @@ export const IntegranteModal: FC<Props> = ({ isOpen, onClose, integrante }) => {
     data = uppercaseStrings(data);
     deleteFalsyAttributes(data);
     if (!data.fecha_nac || parseInt(data.fecha_nac.substr(0, 4)) > 2022){
-      return fireError();
+      return fireError("Fecha de nacimiento inválida");
     }
     if (integrante) {
       await sambaApi.patch(`/integrantes/${integrante.id}`, data);

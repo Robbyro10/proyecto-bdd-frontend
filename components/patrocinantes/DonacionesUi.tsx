@@ -38,7 +38,7 @@ export const DonacionesUi: FC<Props> = ({ donaciones, escuelas, tipo }) => {
         <p>NO TIENE</p>
       )}
       {
-        escuelas ? (
+        escuelas[0] ? (
           <button
             onClick={() => setIsOpen(true)}
             className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"

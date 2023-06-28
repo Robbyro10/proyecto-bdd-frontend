@@ -74,7 +74,7 @@ export const PatroEscuelaModal: FC<Props> = ({
           .catch(() => fireError());
       }
     } else {
-      fireError();
+      fireError("Fechas inválidas");
     }
   };
 

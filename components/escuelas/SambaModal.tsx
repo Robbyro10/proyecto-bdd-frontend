@@ -37,7 +37,7 @@ export const SambaModal: FC<Props> = ({
     data = { ...data, año_carnaval: parseInt(data.año_carnaval) };
     data = uppercaseStrings(data);
     if (data.año_carnaval > 2023) {
-      return fireError();
+      return fireError("Año de Carnaval inválido");
     }
     if (samba) {
       await sambaApi.patch(`/samba/${samba.id}`, data);

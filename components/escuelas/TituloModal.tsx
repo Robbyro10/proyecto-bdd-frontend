@@ -43,7 +43,7 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
       agjid_escuela: parseInt(router.query.id as string),
     };
     if (parseInt(data.año.substr(0, 4)) > 2023){
-      return fireError();
+      return fireError("Año inválido");
     }
     if (titulo) {
       await sambaApi.patch(
