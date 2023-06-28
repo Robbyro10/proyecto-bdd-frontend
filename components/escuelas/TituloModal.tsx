@@ -28,20 +28,20 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
   useEffect(() => {
     setValue("monto_ganado", titulo?.monto_ganado);
     setValue("grupo", titulo?.grupo);
-    setValue("año", new Date().toISOString().substring(0, 10));
+    setValue("año", titulo?.año.substring(0,10) || new Date().toISOString().substring(0, 10));
   }, [titulo]);
 
   if (!isOpen) return null;
 
   const onSubmit = async (data: any) => {
-    if (!data.monto_ganado) {
-      data.monto_ganado = 0;
-    }
     data = {
       ...data,
       monto_ganado: parseInt(data.monto_ganado),
       agjid_escuela: parseInt(router.query.id as string),
     };
+    if (!data.monto_ganado) {
+      delete data.monto_ganado
+    }
     if (parseInt(data.año.substr(0, 4)) > 2023){
       return fireError("Año inválido");
     }
@@ -92,11 +92,11 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
               </div>
             )}
             <div className="flex flex-col gap-1">
-              <label className="text-lg">Monto Ganado</label>
+              <label className="text-lg">Monto Ganado R$</label>
               <input
                 className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                 type="number"
-                placeholder="Monto Ganado"
+                placeholder="Monto Ganado R$"
                 {...register("monto_ganado")}
               />
             </div>

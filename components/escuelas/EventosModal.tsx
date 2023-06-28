@@ -6,6 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import { uppercaseStrings } from "@/utils/uppercaseStrings";
 import { fireToast } from "@/utils/fireToast";
 import { useRouter } from "next/router";
+import { checkDates, fireError } from "@/utils";
 
 interface Props {
   isOpen: boolean;
@@ -43,14 +44,18 @@ export const EventosModal: FC<Props> = ({ isOpen, onClose, evento }) => {
       costo_unitario_r$: parseInt(data.costo_unitario_r$),
     };
     data = uppercaseStrings(data);
-    if (evento) {
-      await sambaApi.patch(`/escuelas/evento/${evento.id}`, data);
-      fireToast("Evento actualizado con éxito");
+    if (checkDates(data.fecha_ini, data.fecha_fin)) {
+      if (evento) {
+        await sambaApi.patch(`/escuelas/evento/${evento.id}`, data);
+        fireToast("Evento actualizado con éxito");
+      } else {
+        await sambaApi.post("/escuelas/evento", data);
+        fireToast("Evento agregado con éxito");
+      }
+      onClose();
     } else {
-      await sambaApi.post("/escuelas/evento", data);
-      fireToast("Evento agregado con éxito");
+      fireError("Fechas inválidas")
     }
-    onClose();
   };
 
   return (
