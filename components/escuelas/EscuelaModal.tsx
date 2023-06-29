@@ -121,11 +121,13 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
                 className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
                 {...register("id_lugar")}
               >
-                {data.map((lugar: any) => (
-                  <option key={lugar.id} value={lugar.id}>
-                    {lugar.nombre}
-                  </option>
-                ))}
+                {data.map((lugar: any) =>
+                  lugar.tipo === "CIUDAD" ? (
+                    <option key={lugar.id} value={lugar.id}>
+                      {lugar.nombre}
+                    </option>
+                  ) : null
+                )}
               </select>
             </div>
             <button className="bg-secondary mt-5 hover:bg-purple-500 transition ease-out text-white font-bold py-2 rounded-lg">

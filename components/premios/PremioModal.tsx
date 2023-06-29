@@ -43,9 +43,6 @@ export const PremioModal: FC<Props> = ({ isOpen, onClose, premio, tipo }) => {
       lugar_id: parseInt(data.lugar_id),
     };
     data = uppercaseStrings(data);
-
-    console.log(data)
-
     if (premio) {
       await sambaApi.patch(`/premios/${data.año.substring(0, 10)}`, data);
       fireToast("Premio actualizado con éxito");
@@ -84,7 +81,7 @@ export const PremioModal: FC<Props> = ({ isOpen, onClose, premio, tipo }) => {
                 className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                 type="text"
                 placeholder="Nombre del Premio"
-                {...register("nombre", {required: true})}
+                {...register("nombre", { required: true })}
               />
               {errors.nombre?.type === "required" && (
                 <p className="text-error mb-3">Campo obligatorio</p>
@@ -97,7 +94,7 @@ export const PremioModal: FC<Props> = ({ isOpen, onClose, premio, tipo }) => {
                 className="px-3 py-2 rounded-lg border-2 hover:border-secondary transition ease-out"
                 type="text"
                 placeholder="Descripción"
-                {...register("descripcion", { required: true})}
+                {...register("descripcion", { required: true })}
               />
               {errors.descripcion?.type === "required" && (
                 <p className="text-error mb-3">Campo obligatorio</p>
@@ -107,16 +104,17 @@ export const PremioModal: FC<Props> = ({ isOpen, onClose, premio, tipo }) => {
             <div className="flex flex-col w-full gap-1 relative">
               <label className="text-lg">Lugar</label>
               <BsChevronDown className="absolute right-4 bottom-3" />
-
               <select
                 className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
                 {...register("lugar_id")}
               >
-                {data.map((lugar: any) => (
-                  <option key={lugar.id} value={lugar.id}>
-                    {lugar.nombre}
-                  </option>
-                ))}
+                {data.map((lugar: any) =>
+                  lugar.tipo === "CIUDAD" ? (
+                    <option key={lugar.id} value={lugar.id}>
+                      {lugar.nombre}
+                    </option>
+                  ) : null
+                )}
               </select>
             </div>
 

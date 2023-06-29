@@ -113,7 +113,7 @@ export const TituloModal: FC<Props> = ({ isOpen, onClose, titulo }) => {
                 <option value="B">B</option>
                 <option value="C">C</option>
                 <option value="Ac">Ac</option>
-                <option value="E">E</option>
+                <option value="E">Especial</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

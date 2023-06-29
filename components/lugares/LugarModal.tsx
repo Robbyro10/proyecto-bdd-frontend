@@ -27,11 +27,15 @@ export const LugarModal: FC<Props> = ({ isOpen, onClose }) => {
     data = { ...data, id_lugar_padre: parseInt(data.id_lugar_padre) };
     data = uppercaseStrings(data);
     deleteFalsyAttributes(data);
-    await sambaApi.post(`/escuelas/lugar`, data)
-    .then(()=> {
-      fireToast("Lugar agregado con éxito");
-      onClose();
-    }).catch(()=> {fireError()});
+    await sambaApi
+      .post(`/escuelas/lugar`, data)
+      .then(() => {
+        fireToast("Lugar agregado con éxito");
+        onClose();
+      })
+      .catch(() => {
+        fireError();
+      });
   };
 
   if (isLoading) return <h1>Loading...</h1>;
@@ -89,11 +93,13 @@ export const LugarModal: FC<Props> = ({ isOpen, onClose }) => {
                 {...register("id_lugar_padre")}
               >
                 <option></option>
-                {data.map((lugar: any) => (
-                  <option key={lugar.id} value={lugar.id}>
-                    {lugar.nombre}
-                  </option>
-                ))}
+                {data.map((lugar: any) =>
+                  lugar.tipo === "ESTADO" ? (
+                    <option key={lugar.id} value={lugar.id}>
+                      {lugar.nombre}
+                    </option>
+                  ) : null
+                )}
               </select>
             </div>
 
