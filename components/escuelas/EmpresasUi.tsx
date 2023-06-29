@@ -14,7 +14,7 @@ export const EmpresasUi: FC<Props> = ({ empresas }) => {
       {empresas[0] ? (
         <>
           {empresas.map((emp: any) => (
-            <div key={emp.id} className="flex flex-col">
+            <div key={emp.id} className="flex flex-col p-3 bg-accent-light">
               <Link
                 href={"/patrocinante-empresa/" + emp.empresa_id}
                 className="w-fit font-semibold text-secondary hover:underline"

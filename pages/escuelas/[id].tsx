@@ -14,8 +14,8 @@ import {
   TitulosUi,
 } from "@/components/escuelas";
 import { TelefonoUi } from "@/components/telefonos/TelefonoUi";
-import Link from "next/link";
 import { PremiosUi } from "@/components/premios/PremiosUi";
+import { DineroUi } from "@/components/escuelas/DineroUi";
 
 interface Props {
   id: string;
@@ -70,6 +70,8 @@ const EscuelaDetailPage: NextPage<Props> = ({ id }) => {
       <h2 className="font-bold text-xl mt-5 text-primary">PATROCINANTES</h2>
       <EmpresasUi empresas={empresas} />
       <PersonasUi personas={personas} />
+
+      <DineroUi id={id} />
     </AppLayout>
   );
 };
