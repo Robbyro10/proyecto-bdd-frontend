@@ -59,6 +59,7 @@ export const AddPremioModal: FC<Props> = ({ isOpen, onClose, tipo }) => {
         escuela_id: parseInt(router.query.id as string),
         premio_id: parseInt(data.premio_id),
       };
+      delete data.escuelaFecha_ini;
       if (parseInt(data.año.substr(0, 4)) > 2023) {
         return fireError("Año inválido");
       } else {
@@ -127,29 +128,34 @@ export const AddPremioModal: FC<Props> = ({ isOpen, onClose, tipo }) => {
                 ))}
               </select>
             </div>
-            <div className="flex flex-col w-full gap-1 relative">
-              <label className="text-lg">Seleccione Histórico</label>
-              <BsChevronDown className="absolute right-4 bottom-3" />
-              <select
-                className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
-                {...register("escuelaFecha_ini")}
-              >
-                {historicos.map((hist: any) => (
-                  <option
-                    key={hist.fecha_ini + hist.id}
-                    value={
-                      hist.agjid_escuela + "/" + hist.fecha_ini.substring(0, 10)
-                    }
-                  >
-                    {hist.nombre} ({hist.fecha_ini.substring(0, 10)} a{" "}
-                    {hist.fecha_fin
-                      ? hist.fecha_fin.substring(0, 10)
-                      : "ACTUALIDAD"}
-                    )
-                  </option>
-                ))}
-              </select>
-            </div>
+            {tipo === "I" && (
+              <div className="flex flex-col w-full gap-1 relative">
+                <label className="text-lg">Seleccione Histórico</label>
+                <BsChevronDown className="absolute right-4 bottom-3" />
+                <select
+                  className="px-3 py-2 rounded-lg border-2 focus:outline-secondary hover:border-secondary transition ease-out appearance-none"
+                  {...register("escuelaFecha_ini")}
+                >
+                  {historicos.map((hist: any) => (
+                    <option
+                      key={hist.fecha_ini + hist.id}
+                      value={
+                        hist.agjid_escuela +
+                        "/" +
+                        hist.fecha_ini.substring(0, 10)
+                      }
+                    >
+                      {hist.nombre} ({hist.fecha_ini.substring(0, 10)} a{" "}
+                      {hist.fecha_fin
+                        ? hist.fecha_fin.substring(0, 10)
+                        : "ACTUALIDAD"}
+                      )
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="flex flex-col gap-1">
               <label className="text-lg">Año</label>
               <input
