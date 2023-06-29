@@ -45,10 +45,10 @@ export const PatroEmpresaUi: FC<Props> = ({ empresa, id }) => {
         >
           <FaPencilAlt />
         </button>
-        <button onClick={handleDelete} className="flex items-center ml-auto text-error font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out">
+        {/* <button onClick={handleDelete} className="flex items-center ml-auto text-error font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out">
           <FiTrash2 />
           Borrar Patrocinante
-        </button>
+        </button> */}
       </div>
       <h2 className="font-bold text-xl mt-5">MISIÓN</h2>
       <p>{empresa.mision}.</p>

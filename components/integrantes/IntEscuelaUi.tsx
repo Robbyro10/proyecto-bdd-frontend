@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { IntEscuelaModal } from "./IntEscuelaModal";
 
 interface Props {
@@ -8,6 +8,17 @@ interface Props {
 
 export const IntEscuelaUi: FC<Props> = ({ escuela }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [enableNew, setEnableNew] = useState(false);
+
+  useEffect(() => {
+    if (escuela.some(esc => !esc.fecha_fin)) {
+      setEnableNew(false);
+    }
+  }, [escuela])
+  
+
+  console.log(escuela)
+  
 
   return (
     <>
@@ -38,12 +49,17 @@ export const IntEscuelaUi: FC<Props> = ({ escuela }) => {
         )}
       </div>
       <IntEscuelaModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      {
+        !enableNew ? (
+
       <button
         onClick={() => setIsOpen(true)}
         className="flex items-center text-secondary font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-secondary hover:bg-secondary border border-secondary hover:text-white transition ease-out"
       >
         Agregar Escuela
       </button>
+        ) : <p>Debe tener un historico abierto</p>
+      }
     </>
   );
 };

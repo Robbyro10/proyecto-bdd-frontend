@@ -50,10 +50,13 @@ export const PatroPersonaUi: FC<Props> = ({ persona, id }) => {
           <FaPencilAlt />
         </button>
 
-        <button onClick={handleDelete} className="flex ml-auto items-center text-error font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out">
-        <FiTrash2 />
-        Borrar Patrocinante
-      </button>
+        {/* <button
+          onClick={handleDelete}
+          className="flex ml-auto items-center text-error font-bold gap-2 mt-3 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out"
+        >
+          <FiTrash2 />
+          Borrar Patrocinante
+        </button> */}
       </div>
       <h2 className="font-bold text-xl mt-5">EMAIL DE CONTACTO</h2>
       <p>{persona.email_contacto}</p>

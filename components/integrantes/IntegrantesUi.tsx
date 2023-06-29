@@ -49,13 +49,13 @@ export const IntegrantesUi: FC<Props> = ({ integrante, id }) => {
         >
           <FaPencilAlt />
         </button>
-        <button
+        {/* <button
           onClick={handleDelete}
           className="flex ml-auto items-center text-error font-bold gap-2 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out"
         >
           <FiTrash2 />
           Borrar Integrante
-        </button>
+        </button> */}
       </div>
       <div className="grid grid-cols-2 max-w-lg mb-8">
         <div>

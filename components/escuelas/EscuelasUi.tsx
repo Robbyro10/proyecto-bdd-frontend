@@ -43,13 +43,13 @@ export const EscuelasUi:FC<Props> = ({ escuela, id }) => {
         >
           <FaPencilAlt />
         </button>
-        <button
+        {/* <button
           onClick={handleDelete}
           className="flex ml-auto items-center text-error font-bold gap-2 bg-white rounded-md px-3 py-1 bg-error hover:bg-error border border-error hover:text-white transition ease-out"
         >
           <FiTrash2 />
           Borrar Escuela
-        </button>
+        </button> */}
       </div>
       <h2 className="font-bold text-xl mt-5">HISTORIA</h2>
       <p>{escuela.resumen_hist}</p>
