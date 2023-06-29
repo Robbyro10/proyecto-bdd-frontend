@@ -16,7 +16,7 @@ export const Navbar = () => {
           </h2>
         </Link>
         <div className="flex justify-between items-center">
-          <div className="flex gap-5 items-center font-bold text-white">
+          <div className="flex gap-2 items-center font-bold text-white">
             <Link href="/escuelas" className={`hover:bg-white hover:text-secondary rounded-md px-2 py-1 transition ${asPath.includes('/escuelas') ? 'text-secondary bg-white' : ''}`}>
               Escuelas
             </Link>
