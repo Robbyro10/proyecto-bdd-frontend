@@ -56,7 +56,7 @@ export const EscuelaModal: FC<Props> = ({ isOpen, onClose, escuela }) => {
     <div className="fixed bg-black z-20 inset-0 bg-opacity-30 flex justify-center items-center backdrop-blur-sm">
       <div
         tabIndex={0}
-        className="bg-white shadow p-6 rounded-lg w-[500px] relative mx-2"
+        className="bg-white h-full overflow-y-auto shadow p-6 rounded-lg w-[500px] relative mx-2"
       >
         <button
           onClick={onClose}
